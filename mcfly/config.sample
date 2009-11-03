@@ -1,0 +1,4 @@
+# Sample Mcfly configuration file
+
+# Set the module directory path
+modules_path = "/home/enferex/proj/mcfly/trunk/modules/"

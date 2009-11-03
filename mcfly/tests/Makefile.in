@@ -1,0 +1,17 @@
+CC = @CC@
+CFLAGS = @CFLAGS@
+CLIBS = @CLIBS@
+INCLUDE = ../include
+OBJS = main.o
+APP = testapp
+EXTRA_CLEAN = $(APP)
+
+all: $(APP)
+
+$(APP): $(OBJS)
+	$(CC) -o $@ $(OBJS) -L../srclib/ -lmcfly $(CLIBS)
+
+test:
+	LD_LIBRARY_PATH=../srclib/ ./testapp
+
+include ../make.inc

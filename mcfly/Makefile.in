@@ -1,0 +1,15 @@
+SUBDIRS = srclib modules tests
+EXTRA_CLEAN = config.log config.status Makefile
+
+all: $(SUBDIRS)
+	@for i in $(SUBDIRS); do $(MAKE) -C $$i; done
+
+clean:
+	@for i in $(SUBDIRS); do $(MAKE) clean -C $$i; done
+
+test: all
+	$(MAKE) test -C tests/
+
+distclean: clean
+	@rm -rfv $(EXTRA_CLEAN)
+	@for i in $(SUBDIRS); do rm -rfv $$i/Makefile; done
