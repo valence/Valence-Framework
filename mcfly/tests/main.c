@@ -41,6 +41,7 @@ static mcfly_err_t recvcb(
 /*
  * Test Routines
  */
+
 static mcfly_err_t test_list_add(void)
 {
     int                    i, sum_before, sum_after;
