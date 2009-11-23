@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <fcntl.h>
 #include <unistd.h>
 #include "obd.h"
+
+#if 0
+#include <sys/ioctl.h>
+#include <sys/termios.h>
+#endif
 
 
 #define ERR(_expr, _err_val)             \
@@ -24,12 +28,12 @@ static void usage(const char *execname)
 
 static void test_read(int fd)
 {
-    char    c;
-    ssize_t sz;
+    ssize_t       sz;
+    unsigned char c;
     
     printf("Reading...\n");
-    while ((sz = read(fd, &c, 1) > 0))
-      printf("0x%02x\n", c);
+    while ((sz = read(fd, &c, 1)) > 0)
+      printf("0x%x (%c)\n", c, c);
 }
 
 
@@ -37,6 +41,21 @@ static void test_write(int fd)
 {
     int       sz, msg_sz;
     obd_msg_t msg;
+
+#if 0
+    struct termios io;
+    ERR(ioctl(fd, TCGETS, &io), -1);
+    io.c_cflag &= ~CBAUD;
+    io.c_cflag |= B19200;
+    io.c_iflag &= ~(IGNBRK | BRKINT | IGNPAR | PARMRK | INPCK | ISTRIP |
+                    INLCR | IGNCR | ICRNL | IXON | IXOFF | IUCLC |
+                    IXANY | IMAXBEL);
+    io.c_oflag &= ~OPOST;
+    io.c_lflag &= ~(ISIG | ICANON | XCASE);
+    io.c_cc[VMIN] = 1;
+    io.c_cc[VTIME] = 0;
+    ERR(ioctl(fd, TCSETS, &io), -1);
+#endif
 
     /* VIN */
     msg = obd_create_msg(OBD_PROTO_ISO14230, OBD_MODE_9, 0x02, &msg_sz);
@@ -54,13 +73,13 @@ int main(int argc, char **argv)
     if (argc != 2)
       usage(argv[0]);
 
-    printf("Opening device '%s'...\n", argv[1]);
-    ERR(fd = open(argv[1], O_RDWR), -1);
+    printf("Initalizing OBD device at '%s'...\n", argv[1]);
+    ERR(fd = obd_init(argv[1]), -1);
 
     test_write(fd);
     test_read(fd);
 
-    close(fd);
+    obd_shutdown(fd);
 
     return 0;
 }

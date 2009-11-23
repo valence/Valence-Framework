@@ -1,5 +1,14 @@
 #include <string.h>
+#include <fcntl.h>
+#include <termios.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
 #include "obd.h"
+
+
+/* Global serial configurations for OBD device */
+struct termios obd_termios;
+struct termios obd_termios_original;
 
 
 static void create_header(obd_msg_t *msg, OBD_PROTO proto, int data_sz)
@@ -31,6 +40,34 @@ static void create_header(obd_msg_t *msg, OBD_PROTO proto, int data_sz)
 static int data_size(OBD_PARAM pid)
 {
     return 2;
+}
+
+
+int obd_init(const char *device_path)
+{
+    int fd;
+
+    if ((fd = open(device_path, O_RDWR)) == -1)
+      return -1;
+
+    /* Save original terminal settings (so we can restore at shutdown) */
+    if (ioctl(fd, TCGETS, &obd_termios_original) == -1)
+      return -1;
+
+    /* Set just the baud to 38400 */
+    memcpy(&obd_termios, &obd_termios_original, sizeof(struct termios));
+    obd_termios.c_cflag &= ~CBAUD;
+    obd_termios.c_cflag |= B38400;
+    if (ioctl(fd, TCSETS, &obd_termios) == -1)
+      return -1;
+
+    return fd;
+}
+
+
+void obd_shutdown(int fd)
+{
+    close(fd);
 }
 
 

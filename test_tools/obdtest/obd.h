@@ -1,3 +1,9 @@
+#ifndef _OBD_H
+#define _OBD_H
+
+#include <termios.h>
+
+
 /* OBD-II Message Format Resource:
  * http://obddiagnostics.com/obdinfo/msg_struct.html
  * http://en.wikipedia.org/wiki/OBD-II_PIDs
@@ -39,8 +45,23 @@ struct _obd_msg_t
 typedef unsigned int OBD_PARAM;
 
 
+/* Global serial configurations for OBD device */
+extern struct termios obd_termios;
+extern struct termios obd_termios_original;
+
+
+/* Returns file descriptor */
+extern int obd_init(const char *device_path);
+
+
+/* Takes the file descriptor (idealy returned from obd_init) */
+extern void obd_shutdown(int fd);
+
+
 extern obd_msg_t obd_create_msg(
     OBD_PROTO  protocol,
     OBD_MODE   mode,
     OBD_PARAM  pid,
     int       *msg_sz); /* Returned message size */
+
+#endif /* _OBD_H */
