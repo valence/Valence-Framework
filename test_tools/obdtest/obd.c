@@ -67,6 +67,7 @@ int obd_init(const char *device_path)
 
 void obd_shutdown(int fd)
 {
+    ioctl(fd, TCSETS, &obd_termios_original);
     close(fd);
 }
 
