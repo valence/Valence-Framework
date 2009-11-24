@@ -43,6 +43,7 @@ static int data_size(OBD_PARAM pid)
 }
 
 
+/* Initalize the ELM 327 chip */
 int obd_init(const char *device_path)
 {
     int fd;
@@ -58,6 +59,17 @@ int obd_init(const char *device_path)
     memcpy(&obd_termios, &obd_termios_original, sizeof(struct termios));
     obd_termios.c_cflag &= ~CBAUD;
     obd_termios.c_cflag |= B38400;
+
+    /* No parity */
+    obd_termios.c_cflag &= ~PARENB;
+
+    /* 1 stop bit */
+    obd_termios.c_cflag &= ~CSTOPB;
+
+    /* 8 data bits */
+    obd_termios.c_cflag &= ~CSIZE;
+    obd_termios.c_cflag |= CS8;
+
     if (ioctl(fd, TCSETS, &obd_termios) == -1)
       return -1;
 
