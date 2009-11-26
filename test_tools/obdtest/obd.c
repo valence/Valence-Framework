@@ -90,3 +90,30 @@ int obd_send_msg(int fd, obd_msg_t msg)
     /* 4 hex digits + carriage return */
     return write(fd, &msg, 5);
 }
+
+
+obd_msg_t *obd_recv_msg(int fd, int *n_msgs)
+{
+    int           idx;
+    unsigned char c, prev, buf[256] = {0};
+
+    /* Recieve the data */
+    idx = 0;
+    while ((read(fd, &c, 1) > 0) && (idx < sizeof(buf)))
+    {
+        if (c == '>')
+          break;
+        else if ((prev == '\n') && (c == '\n'))
+          break;
+        buf[idx++] = c;
+        prev = c;
+    }
+
+    /* Parse the data */
+
+    /* Allocate the proper number of messages */
+
+    /* Set the number of message size */
+
+    return NULL;
+}
