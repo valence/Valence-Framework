@@ -83,3 +83,10 @@ void obd_create_msg(
     /* Please return my horse */
     msg[4] = '\r';
 }
+
+
+int obd_send_msg(int fd, obd_msg_t msg)
+{
+    /* 4 hex digits + carriage return */
+    return write(fd, &msg, 5);
+}

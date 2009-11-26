@@ -59,4 +59,11 @@ extern void obd_create_msg(
     OBD_MODE   mode,
     OBD_PARAM  pid);
 
+
+/* Send the 'created' message down the OBD-II device.  Upon success the amount
+ * of bytes written to the ELM device is returned.  A negative -1 is returned
+ * on error, and errno should be set.
+ */
+extern int obd_send_msg(int fd, obd_msg_t msg);
+
 #endif /* _OBD_H */
