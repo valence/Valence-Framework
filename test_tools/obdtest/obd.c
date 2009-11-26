@@ -67,12 +67,19 @@ void obd_shutdown(int fd)
 }
 
 
-/* TODO */
 void obd_create_msg(
     obd_msg_t  msg,
     OBD_MODE   mode,
     OBD_PARAM  pid)
 {
     memset(msg, 0, sizeof(obd_msg_t));
-    snprintf(msg, sizeof(obd_msg_t), "0100\r");
+
+    /* Mode to string */
+    snprintf(msg, 3, "%02x", mode);
+
+    /* PID to string */
+    snprintf(msg + 2, 3, "%02x", pid);
+
+    /* Please return my horse */
+    msg[4] = '\r';
 }

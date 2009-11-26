@@ -54,7 +54,7 @@ int main(int argc, char **argv)
       usage(argv[0]);
 
     printf("Initalizing OBD device at '%s'...\n", argv[1]);
-    ERR(fd = obd_init(argv[1]), -1);
+//    ERR(fd = obd_init(argv[1]), -1);
 
     test_write(fd);
     test_read(fd);
