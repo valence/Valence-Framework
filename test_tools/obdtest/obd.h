@@ -9,16 +9,6 @@
  * http://en.wikipedia.org/wiki/OBD-II_PIDs
  */
 
-typedef enum _OBD_PROTO OBD_PROTO;
-enum _OBD_PROTO 
-{
-    OBD_PROTO_PWM,
-    OBD_PROTO_VPW,
-    OBD_PROTO_ISO9141,
-    OBD_PROTO_ISO14230,
-};
-
-
 typedef enum _OBD_MODE OBD_MODE;
 enum _OBD_MODE
 {
@@ -34,14 +24,6 @@ enum _OBD_MODE
 };
 
 
-typedef struct _obd_msg_t obd_msg_t;
-struct _obd_msg_t
-{
-    unsigned char header[3];
-    unsigned char data[8]; /* Includes CRC at the end */
-};
-
-
 typedef unsigned int OBD_PARAM;
 
 
@@ -54,14 +36,17 @@ extern struct termios obd_termios_original;
 extern int obd_init(const char *device_path);
 
 
+/* Message structure (ELM takes ascii) */
+typedef char obd_msg_t[6];
+
+
 /* Takes the file descriptor (idealy returned from obd_init) */
 extern void obd_shutdown(int fd);
 
 
-extern obd_msg_t obd_create_msg(
-    OBD_PROTO  protocol,
+extern void obd_create_msg(
+    obd_msg_t  msg,  /* The constructed message is stored here */
     OBD_MODE   mode,
-    OBD_PARAM  pid,
-    int       *msg_sz); /* Returned message size */
+    OBD_PARAM  pid);
 
 #endif /* _OBD_H */

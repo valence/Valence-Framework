@@ -1,46 +1,14 @@
+#include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
 #include <termios.h>
 #include <unistd.h>
-#include <sys/ioctl.h>
 #include "obd.h"
 
 
 /* Global serial configurations for OBD device */
 struct termios obd_termios;
 struct termios obd_termios_original;
-
-
-static void create_header(obd_msg_t *msg, OBD_PROTO proto, int data_sz)
-{
-    switch (proto)
-    {
-        case OBD_PROTO_PWM:
-            msg->header[0] = 0x61;
-            msg->header[1] = 0x6A;
-            msg->header[2] = 0xF1;
-            break;
-
-        case OBD_PROTO_VPW: 
-        case OBD_PROTO_ISO9141:
-            msg->header[0] = 0x68;
-            msg->header[1] = 0x6A;
-            msg->header[2] = 0xF1;
-            break;
-
-        case OBD_PROTO_ISO14230:
-            msg->header[0] = (3<<6) | data_sz;
-            msg->header[1] = 0x33;
-            msg->header[2] = 0xF1;
-            break;
-    }
-}
-
-
-static int data_size(OBD_PARAM pid)
-{
-    return 2;
-}
 
 
 /* Initalize the ELM 327 chip */
@@ -52,7 +20,7 @@ int obd_init(const char *device_path)
       return -1;
 
     /* Save original terminal settings (so we can restore at shutdown) */
-    if (ioctl(fd, TCGETS, &obd_termios_original) == -1)
+    if (tcgetattr(fd, &obd_termios_original) == -1)
       return -1;
 
     /* Set just the baud to 38400 */
@@ -60,18 +28,33 @@ int obd_init(const char *device_path)
     obd_termios.c_cflag &= ~CBAUD;
     obd_termios.c_cflag |= B38400;
 
+    /* 8 data bits */
+    obd_termios.c_cflag &= ~CSIZE;
+    obd_termios.c_cflag |= CS8;
+
     /* No parity */
     obd_termios.c_cflag &= ~PARENB;
 
     /* 1 stop bit */
     obd_termios.c_cflag &= ~CSTOPB;
 
-    /* 8 data bits */
-    obd_termios.c_cflag &= ~CSIZE;
-    obd_termios.c_cflag |= CS8;
+    /* Turn off flow control */
+    obd_termios.c_iflag &= ~(IXON | IXOFF);
 
-    if (ioctl(fd, TCSETS, &obd_termios) == -1)
+    /* Enable newline as carriage return */
+    obd_termios.c_iflag |= INLCR;
+
+    /* Disable implementation defined output processing */
+    obd_termios.c_oflag &= ~OPOST;
+
+    /* Do not echo input */
+    obd_termios.c_lflag &= ~ECHO;
+
+    if (tcsetattr(fd, TCSANOW, &obd_termios) == -1)
       return -1;
+
+    /* What the toilet says... */
+    tcflush(fd, TCIOFLUSH);
 
     return fd;
 }
@@ -79,29 +62,17 @@ int obd_init(const char *device_path)
 
 void obd_shutdown(int fd)
 {
-    ioctl(fd, TCSETS, &obd_termios_original);
+    tcsetattr(fd, TCSANOW, &obd_termios_original);
     close(fd);
 }
 
 
-obd_msg_t obd_create_msg(
-    OBD_PROTO  proto,
+/* TODO */
+void obd_create_msg(
+    obd_msg_t  msg,
     OBD_MODE   mode,
-    OBD_PARAM  pid,
-    int       *msg_sz)
+    OBD_PARAM  pid)
 {
-    int       data_sz;
-    obd_msg_t msg;
-
-    memset(&msg, 0, sizeof(obd_msg_t));
-    data_sz = data_size(pid);
-    create_header(&msg, proto, data_sz);
-
-    msg.data[0] = mode;
-    msg.data[1] = pid;
-
-    if (msg_sz)
-      *msg_sz = sizeof(msg.header) + data_sz;
-
-    return msg;
+    memset(msg, 0, sizeof(obd_msg_t));
+    snprintf(msg, sizeof(obd_msg_t), "0100\r");
 }
