@@ -4,11 +4,20 @@
 #include <termios.h>
 
 
+/* NOTE: This library assumes that the ELM 327 chip is being used.  Therefore,
+ * the OBD-II header is not needed, nor is byte-swapping to big-endian, ELM
+ * handles that.  Their 327 development document, as a wealth of information.
+ * http://www.elmelectronics.com
+ */
+
+
 /* OBD-II Message Format Resource:
  * http://obddiagnostics.com/obdinfo/msg_struct.html
  * http://en.wikipedia.org/wiki/OBD-II_PIDs
  */
 
+
+/* OBD-II mode */
 typedef enum _OBD_MODE OBD_MODE;
 enum _OBD_MODE
 {
@@ -24,6 +33,7 @@ enum _OBD_MODE
 };
 
 
+/* Parameter ID value */
 typedef unsigned int OBD_PARAM;
 
 
