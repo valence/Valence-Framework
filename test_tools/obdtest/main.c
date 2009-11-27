@@ -23,17 +23,11 @@ static void usage(const char *execname)
 
 static void test_read(int fd)
 {
-    ssize_t       sz;
-    unsigned char c, prev;
+    int        n_msgs;
+    obd_msg_t *msgs;
     
     printf("Reading...\n");
-    while ((sz = read(fd, &c, 1) > 0) && (c != '>'))
-    {
-        if ((prev == '\n') && (c == '\n'))
-          break;
-        printf("%c", c);
-        prev = c;
-    }
+    msgs = obd_recv_msgs(fd, &n_msgs);
 }
 
 
@@ -47,7 +41,7 @@ static void test_write(int fd)
 
     printf("Writing to device...\n");
     ERR(sz = obd_send_msg(fd, msg), -1);
-    printf("Write %d bytes\n", sz);
+    printf("Wrote %d bytes\n", sz);
 }
 
 
@@ -59,7 +53,7 @@ int main(int argc, char **argv)
       usage(argv[0]);
 
     printf("Initalizing OBD device at '%s'...\n", argv[1]);
-//    ERR(fd = obd_init(argv[1]), -1);
+    ERR(fd = obd_init(argv[1]), -1);
 
     test_write(fd);
     test_read(fd);

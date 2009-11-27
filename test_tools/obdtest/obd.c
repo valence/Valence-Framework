@@ -1,9 +1,12 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <fcntl.h>
 #include <termios.h>
 #include <unistd.h>
 #include "obd.h"
+
+#undef TEST
 
 
 /* Global serial configurations for OBD device */
@@ -18,6 +21,10 @@ int obd_init(const char *device_path)
 
     if ((fd = open(device_path, O_RDWR)) == -1)
       return -1;
+
+#ifdef TEST
+    return fd;
+#endif
 
     /* Save original terminal settings (so we can restore at shutdown) */
     if (tcgetattr(fd, &obd_termios_original) == -1)
@@ -87,33 +94,73 @@ void obd_create_msg(
 
 int obd_send_msg(int fd, obd_msg_t msg)
 {
+#ifdef TEST
+    return 5;
+#endif
+
     /* 4 hex digits + carriage return */
     return write(fd, &msg, 5);
 }
 
 
-obd_msg_t *obd_recv_msg(int fd, int *n_msgs)
+obd_msg_t *obd_recv_msgs(int fd, int *n_msgs)
 {
-    int           idx;
-    unsigned char c, prev, buf[256] = {0};
+    int        msg_idx, char_idx, i, n_lines;
+    char       c, prev, *st, *look, buf[256] = {0};
+    obd_msg_t *msgs;
 
     /* Recieve the data */
-    idx = 0;
-    while ((read(fd, &c, 1) > 0) && (idx < sizeof(buf)))
+    char_idx = 0;
+    while ((read(fd, &c, 1) > 0) && (char_idx < sizeof(buf)))
     {
         if (c == '>')
           break;
         else if ((prev == '\n') && (c == '\n'))
           break;
-        buf[idx++] = c;
+        buf[char_idx++] = c;
         prev = c;
     }
 
-    /* Parse the data */
+    /* Remove the echo'd command from the buffer */
+    if (!(st = strchr(buf, '\n')))
+      return NULL;
+    ++st;
+
+    /* Count number of messages */
+    n_lines = 0;
+    look = st;
+    while ((look = strchr(look, '\n')))
+    {
+        ++n_lines;
+        ++look;
+    }
 
     /* Allocate the proper number of messages */
+    if (!(msgs = calloc(1, sizeof(obd_msg_t) * n_lines)))
+      return NULL;
 
-    /* Set the number of message size */
+    /* Copy the messages */
+    look = st;
+    for (msg_idx=0; msg_idx<n_lines; ++msg_idx)
+    {
+        look = strchr(look, '\n');
 
-    return NULL;
+        /* Copy character per character, skipping spaces */
+        char_idx = 0;
+        for (i=0; i<(look - st); ++i)
+        {
+            if (*(st + i) == ' ')
+              continue;
+            else
+              msgs[msg_idx][char_idx++] = *(st + i);
+        }
+
+        ++look;
+        st = look;
+    }
+    
+    if (n_msgs)
+      *n_msgs = n_lines;
+
+    return msgs;
 }
