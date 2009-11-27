@@ -7,7 +7,7 @@
 #include "obd.h"
 
 
-#define TEST
+#undef TEST
 
 
 /* Global serial configurations for OBD device */
