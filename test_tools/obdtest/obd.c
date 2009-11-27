@@ -6,7 +6,8 @@
 #include <unistd.h>
 #include "obd.h"
 
-#undef TEST
+
+#define TEST
 
 
 /* Global serial configurations for OBD device */

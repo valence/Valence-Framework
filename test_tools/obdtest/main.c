@@ -23,11 +23,15 @@ static void usage(const char *execname)
 
 static void test_read(int fd)
 {
-    int        n_msgs;
+    int        i, n_msgs;
     obd_msg_t *msgs;
     
     printf("Reading...\n");
     msgs = obd_recv_msgs(fd, &n_msgs);
+    printf("Read %d messages\n", n_msgs);
+
+    for (i=0; i<n_msgs; ++i)
+      printf("[%d] %s\n", i+1, msgs[i]);
 }
 
 
