@@ -23,15 +23,20 @@ static void usage(const char *execname)
 
 static void test_read(int fd)
 {
-    int        i, n_msgs;
-    obd_msg_t *msgs;
+    int                  i, n_msgs;
+    obd_msg_t           *msgs;
+    obd_msg_as_ascii_t   ascii;
     
     printf("Reading...\n");
     msgs = obd_recv_msgs(fd, &n_msgs);
     printf("Read %d messages\n", n_msgs);
 
+    /* Display ascii version */
     for (i=0; i<n_msgs; ++i)
-      printf("[%d] %s\n", i+1, msgs[i]);
+    {
+        obd_msg_to_ascii(msgs[i], ascii);
+        printf("[%d] %s\n", i+1, ascii);
+    }
 }
 
 

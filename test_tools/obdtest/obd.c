@@ -1,19 +1,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <fcntl.h>
 #include <termios.h>
 #include <unistd.h>
 #include "obd.h"
 
 
-#undef TEST
+#define TEST
 
+
+/*
+ * Global
+ */
 
 /* Global serial configurations for OBD device */
 struct termios obd_termios;
 struct termios obd_termios_original;
 
+
+/* 
+ * Forwards
+ */
+
+static unsigned char hexascii_to_digit(unsigned char hex);
+static unsigned char digit_to_hexascii(unsigned char dig);
+
+
+/*
+ * Defined
+ */
 
 /* Initalize the ELM 327 chip */
 int obd_init(const char *device_path)
@@ -82,33 +99,71 @@ void obd_create_msg(
 {
     memset(msg, 0, sizeof(obd_msg_t));
 
-    /* Mode to string */
-    snprintf(msg, 3, "%02x", mode);
+    msg[0] = mode;
+    msg[1] = pid;
+}
 
-    /* PID to string */
-    snprintf(msg + 2, 3, "%02x", pid);
 
-    /* Please return my horse */
-    msg[4] = '\r';
+void obd_msg_to_ascii(const obd_msg_t msg, obd_msg_as_ascii_t ascii)
+{
+    int i, offset;
+
+    memset(ascii, 0, sizeof(obd_msg_as_ascii_t));
+
+    for (i=0, offset=0; i<OBD_MAX_MSG_SIZE; ++i, offset+=2)
+    {
+        /* High nybble */
+        ascii[offset] = digit_to_hexascii((msg[i] & 0xF0) >> 4);
+
+        /* Low nybble */
+        ascii[offset+1] = digit_to_hexascii(msg[i] & 0x0F);
+    }
+}
+
+
+void obd_ascii_to_msg(const obd_msg_as_ascii_t ascii, obd_msg_t msg)
+{
+    int  i, offset;
+    unsigned char low, high;
+    
+    memset(msg, 0, sizeof(obd_msg_t));
+
+    for (i=0, offset=0; i<OBD_MAX_MSG_SIZE; ++i, offset+=2)
+    {
+        if (!isalnum(ascii[offset]))
+          break;
+
+        high = hexascii_to_digit(ascii[offset]);
+        low = hexascii_to_digit(ascii[offset+1]);
+        msg[i] = (high<<4) | low;
+    }
 }
 
 
 int obd_send_msg(int fd, obd_msg_t msg)
 {
+    obd_msg_as_ascii_t ascii;
 #ifdef TEST
     return 5;
 #endif
 
+    /* Assuming that all messages for OBD-II are 2 bytes or represented by elm
+     * as 4 ascii characters
+     * */
+    obd_msg_to_ascii(msg, ascii);
+    ascii[4] = '\r';
+
     /* 4 hex digits + carriage return */
-    return write(fd, &msg, 5);
+    return write(fd, ascii, 5);
 }
 
 
 obd_msg_t *obd_recv_msgs(int fd, int *n_msgs)
 {
-    int        msg_idx, char_idx, i, n_lines;
-    char       c, prev, *st, *look, buf[256] = {0};
-    obd_msg_t *msgs;
+    int                 msg_idx, char_idx, i, n_lines;
+    char                c, prev, *st, *look, buf[256] = {0};
+    obd_msg_t          *msgs;
+    obd_msg_as_ascii_t *ascii_msgs;
 
     /* Recieve the data */
     char_idx = 0;
@@ -137,7 +192,7 @@ obd_msg_t *obd_recv_msgs(int fd, int *n_msgs)
     }
 
     /* Allocate the proper number of messages */
-    if (!(msgs = calloc(1, sizeof(obd_msg_t) * n_lines)))
+    if (!(ascii_msgs = calloc(1, sizeof(obd_msg_as_ascii_t) * n_lines)))
       return NULL;
 
     /* Copy the messages */
@@ -153,15 +208,40 @@ obd_msg_t *obd_recv_msgs(int fd, int *n_msgs)
             if (*(st + i) == ' ')
               continue;
             else
-              msgs[msg_idx][char_idx++] = *(st + i);
+              ascii_msgs[msg_idx][char_idx++] = *(st + i);
         }
 
         ++look;
         st = look;
     }
+
+    /* Now that we have data off ELM (as ascii) turn them to binary */
+    if (!(msgs = calloc(1, sizeof(obd_msg_t))))
+      return NULL;
+
+    for (msg_idx=0; msg_idx<n_lines; ++msg_idx)
+      obd_ascii_to_msg(ascii_msgs[msg_idx], msgs[msg_idx]);
     
     if (n_msgs)
       *n_msgs = n_lines;
 
     return msgs;
+}
+
+
+static unsigned char hexascii_to_digit(unsigned char hex)
+{
+    if (isdigit(hex))
+      return hex - '0';
+    else 
+      return ((tolower(hex) - 'a') + 10);
+}
+
+
+static unsigned char digit_to_hexascii(unsigned char dig)
+{
+    if (dig >= 10)
+      return 'A' + (dig - 10);
+    else
+      return '0' + dig;
 }
