@@ -113,10 +113,10 @@ void obd_msg_to_ascii(const obd_msg_t msg, obd_msg_as_ascii_t ascii)
     for (i=0, offset=0; i<OBD_MAX_MSG_SIZE; ++i, offset+=2)
     {
         /* High nybble */
-        ascii[offset] = digit_to_hexascii((msg[i] & 0xF0) >> 4);
+        ((unsigned char *)ascii)[offset] = digit_to_hexascii((msg[i] & 0xF0) >> 4);
 
         /* Low nybble */
-        ascii[offset+1] = digit_to_hexascii(msg[i] & 0x0F);
+        ((unsigned char *)ascii)[offset+1] = digit_to_hexascii(msg[i] & 0x0F);
     }
 }
 
@@ -166,6 +166,7 @@ obd_msg_t *obd_recv_msgs(int fd, int *n_msgs)
     obd_msg_as_ascii_t *ascii_msgs;
 
     /* Recieve the data */
+    prev = 0;
     char_idx = 0;
     while ((read(fd, &c, 1) > 0) && (char_idx < sizeof(buf)))
     {
@@ -192,7 +193,7 @@ obd_msg_t *obd_recv_msgs(int fd, int *n_msgs)
     }
 
     /* Allocate the proper number of messages */
-    if (!(ascii_msgs = calloc(1, sizeof(obd_msg_as_ascii_t) * n_lines)))
+    if (!(ascii_msgs = calloc(n_lines, sizeof(obd_msg_as_ascii_t))))
       return NULL;
 
     /* Copy the messages */
@@ -216,16 +217,27 @@ obd_msg_t *obd_recv_msgs(int fd, int *n_msgs)
     }
 
     /* Now that we have data off ELM (as ascii) turn them to binary */
-    if (!(msgs = calloc(1, sizeof(obd_msg_t))))
-      return NULL;
+    if (!(msgs = calloc(n_lines, sizeof(obd_msg_t))))
+    {
+        free(ascii_msgs);
+        return NULL;
+    }
 
     for (msg_idx=0; msg_idx<n_lines; ++msg_idx)
       obd_ascii_to_msg(ascii_msgs[msg_idx], msgs[msg_idx]);
+
+    free(ascii_msgs);
     
     if (n_msgs)
       *n_msgs = n_lines;
 
     return msgs;
+}
+
+
+void obd_destroy_recv_msgs(obd_msg_t msgs)
+{
+    free(msgs);
 }
 
 

@@ -42,10 +42,6 @@ extern struct termios obd_termios;
 extern struct termios obd_termios_original;
 
 
-/* Returns file descriptor */
-extern int obd_init(const char *device_path);
-
-
 /* Message structure (ELM takes ascii) 
  * OBD-II standard says the data portion of a message is at max 7 bytes, 8
  * seems more alignable.  We are ignoring headers, and let ELM do that.  So
@@ -53,10 +49,14 @@ extern int obd_init(const char *device_path);
  * two hex digits in one byte, we need to double our data size to 16.  ELM
  * should pad all output, so values of 0x1 are 01, or two ascii characters.
  */
-#define OBD_MAX_MSG_SIZE        8
+#define OBD_MAX_MSG_SIZE       8
 #define OBD_MAX_ASCII_MSG_SIZE (OBD_MAX_MSG_SIZE * 2)
 typedef unsigned char obd_msg_t[OBD_MAX_MSG_SIZE];
-typedef char obd_msg_as_ascii_t[OBD_MAX_ASCII_MSG_SIZE];
+typedef unsigned char obd_msg_as_ascii_t[OBD_MAX_ASCII_MSG_SIZE];
+
+
+/* Returns file descriptor */
+extern int obd_init(const char *device_path);
 
 
 /* Takes the file descriptor (ideally returned from obd_init) */
@@ -69,11 +69,15 @@ extern void obd_create_msg(
     OBD_PARAM  pid);
 
 
-/* Take a msg and define it as elm would represent (ascii).
+/* Take a msg and define it as ELM would represent (ascii).
  * Each hex digit is 1 ascii character.  So hexadecimal '0F' would be represented
  * as two ascii characters: '0' and 'F'
  */
 extern void obd_msg_to_ascii(const obd_msg_t msg, obd_msg_as_ascii_t ascii);
+
+
+/* Take ascii (ELM) version of a message and convert it to a binary format */
+extern void obd_ascii_to_msg(const obd_msg_as_ascii_t ascii, obd_msg_t msg);
 
 
 /* Send the 'created' message down the OBD-II device.  Upon success the amount
@@ -88,5 +92,6 @@ extern int obd_send_msg(int fd, obd_msg_t msg);
  * are the actual hexadecimal values and not ascii.
  */
 extern obd_msg_t *obd_recv_msgs(int fd, int *n_msgs);
+extern void obd_destroy_recv_msgs(obd_msg_t msgs);
 
 #endif /* _OBD_H */

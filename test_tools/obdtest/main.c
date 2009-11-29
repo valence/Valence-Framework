@@ -37,6 +37,8 @@ static void test_read(int fd)
         obd_msg_to_ascii(msgs[i], ascii);
         printf("[%d] %s\n", i+1, ascii);
     }
+
+    free(msgs);
 }
 
 
