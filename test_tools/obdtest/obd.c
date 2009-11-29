@@ -8,7 +8,7 @@
 #include "obd.h"
 
 
-#define TEST
+#undef TEST
 
 
 /*
@@ -113,10 +113,10 @@ void obd_msg_to_ascii(const obd_msg_t msg, obd_msg_as_ascii_t ascii)
     for (i=0, offset=0; i<OBD_MAX_MSG_SIZE; ++i, offset+=2)
     {
         /* High nybble */
-        ((unsigned char *)ascii)[offset] = digit_to_hexascii((msg[i] & 0xF0) >> 4);
+        ascii[offset] = digit_to_hexascii((msg[i] & 0xF0) >> 4);
 
         /* Low nybble */
-        ((unsigned char *)ascii)[offset+1] = digit_to_hexascii(msg[i] & 0x0F);
+        ascii[offset+1] = digit_to_hexascii(msg[i] & 0x0F);
     }
 }
 
