@@ -235,7 +235,7 @@ obd_msg_t *obd_recv_msgs(int fd, int *n_msgs)
 }
 
 
-void obd_destroy_recv_msgs(obd_msg_t msgs)
+void obd_destroy_recv_msgs(obd_msg_t *msgs)
 {
     free(msgs);
 }

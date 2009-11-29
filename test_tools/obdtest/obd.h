@@ -92,6 +92,6 @@ extern int obd_send_msg(int fd, obd_msg_t msg);
  * are the actual hexadecimal values and not ascii.
  */
 extern obd_msg_t *obd_recv_msgs(int fd, int *n_msgs);
-extern void obd_destroy_recv_msgs(obd_msg_t msgs);
+extern void obd_destroy_recv_msgs(obd_msg_t *msgs);
 
 #endif /* _OBD_H */
