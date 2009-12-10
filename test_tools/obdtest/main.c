@@ -38,7 +38,7 @@ static void test_read(int fd)
         printf("[%d] %s\n", i+1, ascii);
     }
 
-    free(msgs);
+    obd_destroy_recv_msgs(msgs);
 }
 
 
