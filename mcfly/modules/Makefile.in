@@ -1,4 +1,4 @@
-SUBDIRS = dummy_module
+SUBDIRS = dummy_module elm_module
 
 all: $(SUBDIRS)
 	@for i in $(SUBDIRS); do $(MAKE) -C $$i; done

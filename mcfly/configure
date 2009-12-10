@@ -4346,7 +4346,7 @@ CFLAGS="-g3 -Wall"
 CLIBS="-ldl -lpthread"
 
 
-ac_config_files="$ac_config_files Makefile srclib/Makefile tests/Makefile modules/Makefile modules/dummy_module/Makefile"
+ac_config_files="$ac_config_files Makefile srclib/Makefile tests/Makefile modules/Makefile modules/dummy_module/Makefile modules/elm_module/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -4920,6 +4920,7 @@ do
     "tests/Makefile") CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
     "modules/Makefile") CONFIG_FILES="$CONFIG_FILES modules/Makefile" ;;
     "modules/dummy_module/Makefile") CONFIG_FILES="$CONFIG_FILES modules/dummy_module/Makefile" ;;
+    "modules/elm_module/Makefile") CONFIG_FILES="$CONFIG_FILES modules/elm_module/Makefile" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}

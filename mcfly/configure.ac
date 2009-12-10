@@ -36,5 +36,6 @@ AC_CONFIG_FILES([Makefile
                  srclib/Makefile
                  tests/Makefile
                  modules/Makefile
-                 modules/dummy_module/Makefile])
+                 modules/dummy_module/Makefile
+                 modules/elm_module/Makefile])
 AC_OUTPUT
