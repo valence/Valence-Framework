@@ -1,13 +1,7 @@
-CC = @CC@
-CFLAGS = @CFLAGS@
-CLIBS = @CLIBS@
-ADDITIONAL_CFLAGS = -fPIC
-INCLUDE = ../include
-OBJS = dummy_module.o
-LIBNAMES = dummy_module
-EXTRA_CLEAN=libmcfly_*.so
+SUBDIRS = dummy_module
 
-$(LIBNAMES): $(OBJS)
-	$(CC) -o libmcfly_`basename $@`.so $@.o -shared $(CLIBS)
+all: $(SUBDIRS)
+	@for i in $(SUBDIRS); do $(MAKE) -C $$i; done
 
-include ../make.inc
+clean:
+	@for i in $(SUBDIRS); do $(MAKE) clean -C $$i; done

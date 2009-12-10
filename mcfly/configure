@@ -2622,8 +2622,6 @@ echo "${ECHO_T}no" >&6; }
 fi
 
 
-# Checks for libraries.
-
 # Checks for header files.
 
 
@@ -4348,7 +4346,7 @@ CFLAGS="-g3 -Wall"
 CLIBS="-ldl -lpthread"
 
 
-ac_config_files="$ac_config_files Makefile srclib/Makefile modules/Makefile tests/Makefile"
+ac_config_files="$ac_config_files Makefile srclib/Makefile tests/Makefile modules/Makefile modules/dummy_module/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -4919,8 +4917,9 @@ do
   case $ac_config_target in
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "srclib/Makefile") CONFIG_FILES="$CONFIG_FILES srclib/Makefile" ;;
-    "modules/Makefile") CONFIG_FILES="$CONFIG_FILES modules/Makefile" ;;
     "tests/Makefile") CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
+    "modules/Makefile") CONFIG_FILES="$CONFIG_FILES modules/Makefile" ;;
+    "modules/dummy_module/Makefile") CONFIG_FILES="$CONFIG_FILES modules/dummy_module/Makefile" ;;
 
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}

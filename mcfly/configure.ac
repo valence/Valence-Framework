@@ -8,8 +8,6 @@ AC_INIT()
 AC_PROG_CC
 AC_PROG_MAKE_SET
 
-# Checks for libraries.
-
 # Checks for header files.
 AC_HEADER_DIRENT
 AC_HEADER_STDC
@@ -36,6 +34,7 @@ AC_SUBST(CLIBS)
 
 AC_CONFIG_FILES([Makefile
                  srclib/Makefile
+                 tests/Makefile
                  modules/Makefile
-                 tests/Makefile])
+                 modules/dummy_module/Makefile])
 AC_OUTPUT
