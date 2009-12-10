@@ -5,3 +5,7 @@ all: $(SUBDIRS)
 
 clean:
 	@for i in $(SUBDIRS); do $(MAKE) clean -C $$i; done
+
+distclean: clean
+	@rm Makefile
+	@for i in $(SUBDIRS); do $(MAKE) distclean -C $$i; done

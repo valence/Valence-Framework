@@ -12,4 +12,4 @@ test: all
 
 distclean: clean
 	@rm -rfv $(EXTRA_CLEAN)
-	@for i in $(SUBDIRS); do rm -rfv $$i/Makefile; done
+	@for i in $(SUBDIRS); do $(MAKE) distclean -C $$i; done
