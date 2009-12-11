@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <mcfly/error.h>
 #include <mcfly/type.h>
+#include "elm327.h"
 
 
 /* elm_module
