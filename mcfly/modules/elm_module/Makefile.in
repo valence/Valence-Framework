@@ -1,7 +1,8 @@
 CC = @CC@
 CFLAGS = @CFLAGS@
 CLIBS = @CLIBS@
-OBJS = elm_module.o
+OBJS = elm327.o
+LIBOBJS = elm_module.o
 LIBNAME = elm_module
 EXTRA_CLEAN=libmcfly_*.so
 

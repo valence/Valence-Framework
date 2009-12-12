@@ -1,7 +1,7 @@
 CC = @CC@
 CFLAGS = @CFLAGS@
 CLIBS = @CLIBS@
-OBJS = dummy_module.o
+LIBOBJS = dummy_module.o
 LIBNAME = dummy_module
 EXTRA_CLEAN=libmcfly_*.so
 
