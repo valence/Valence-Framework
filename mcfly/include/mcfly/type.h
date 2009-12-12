@@ -135,7 +135,10 @@ struct _mcfly_mod_t
     /* When this module is loaded dynamically the handle is placed here */
     void *dl_handle;
     
-    /* Unique/module-specific configurations for this module */
+    /* Unique/module-specific configurations for this module.
+     * The module is responsible for calling mcfly_cfg_load() and putting the
+     * result here.
+     */
     const mcfly_cfg_t *configs;
 
     /* Initalize the module */
