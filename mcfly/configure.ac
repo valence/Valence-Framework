@@ -12,7 +12,7 @@ AC_PROG_MAKE_SET
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_TIME
-AC_CHECK_HEADERS([stdlib.h stddef.h fcntl.h])
+AC_CHECK_HEADERS([stdlib.h stddef.h fcntl.h termios.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -22,7 +22,7 @@ AC_TYPE_SSIZE_T
 # Checks for library functions.
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_SELECT_ARGTYPES
-AC_CHECK_FUNCS([memset select mkfifo])
+AC_CHECK_FUNCS([memset select mkfifo strchr])
 
 # Flags
 CFLAGS="-g3 -Wall"
