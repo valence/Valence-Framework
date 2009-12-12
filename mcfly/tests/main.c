@@ -138,9 +138,12 @@ static mcfly_err_t test_reg_recv(void)
 
 static mcfly_err_t test_query_obd(void)
 {
-    int value;
+    mcfly_mod_data_t data;
 
-    mcfly_mod_quer
+    return mcfly_command_by_type(handle,
+                                 MCFLY_MOD_TYPE_OBD,
+                                 MCFLY_MOD_CMD_OBD_SPEED,
+                                 &data);
 }
 
 
@@ -166,7 +169,7 @@ struct
     {"List Add", TEST_LIST_ADD, 0, test_list_add},
     {"List Remove", TEST_LIST_RM, 0, test_list_rm},
     {"Initialization", TEST_INIT, 0, test_init},
-    {"Register Receive", TEST_REG_RECV, 0, test_reg_recv}
+    {"Register Receive", TEST_REG_RECV, 0, test_reg_recv},
     {"Query OBD", TEST_QUERY_OBD, 0, test_query_obd}
 };
 

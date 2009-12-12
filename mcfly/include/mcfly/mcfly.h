@@ -3,6 +3,8 @@
 
 #include <mcfly/error.h>
 #include <mcfly/type.h>
+#include <mcfly/modules/mod_commands.h>
+#include <mcfly/modules/mod_types.h>
 
 
 #define MCFLY_VERSION "0.0"
@@ -44,19 +46,42 @@ extern void mcfly_shutdown(mcfly_t mcfly);
  *
  * Issue a command to a Mcfly device
  *
- * mcfly:     Mcfly handle
- * mod:       Module/Device to query
- * cmd:       Command for device
- * data:      Input data to send, or Output data to receive
+ * mod:  Module/Device to query
+ * cmd:  Command for device
+ * data: Input data to send, or output data to receive
  *
  * Returns: MCFLY_SUCCESS on success, error otherwise.
  *          If data is to be returned, it is placed
  *          in 'data'
  */
 extern mcfly_err_t mcfly_command(
-    const mcfly_t    mcfly, 
-    mcfly_mod_t      mod,
-    mcfly_mod_cmd_t  cmd,
-    mcfly_mod_data_t data);
+    mcfly_mod_t       *mod,
+    mcfly_mod_cmd_t    cmd,
+    mcfly_mod_data_t  *data);
+
+
+/* mcfly_command_by_type
+ *
+ * Issue a command to a Mcfly device.  The first instance of the device 'type'
+ * is queried.  So, if there are multiple devices of 'type' in your Mcfly
+ * configuration file, then the first one is used.  Consider
+ * mcfly_command_by_name, if you require a module that is not the first of its
+ * type listed.
+ *
+ * mcfly: Mcfly handle
+ * type:  Module type to query
+ * cmd:   Command for device
+ * data:  Input data to send, or output data to receive
+ *
+ * Returns: MCFLY_SUCCESS on success, error otherwise.
+ *          If data is to be returned, it is placed
+ *          in 'data'
+ */
+extern mcfly_err_t mcfly_command_by_type(
+    const mcfly_t     mcfly,
+    mcfly_mod_type_t  type,
+    mcfly_mod_cmd_t   cmd,
+    mcfly_mod_data_t *data);
+
 
 #endif /* _MCFLY_LIBRARY_H */

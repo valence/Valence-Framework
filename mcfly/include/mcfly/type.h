@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <mcfly/error.h>
 #include <mcfly/modules/mod_commands.h>
+#include <mcfly/modules/mod_types.h>
 
 
 /*
@@ -113,8 +114,8 @@ typedef mcfly_err_t (*mcfly_mod_fcn)(const mcfly_t mcfly, mcfly_mod_t *me);
 typedef mcfly_err_t (*mcfly_mod_cbfcn)(const mcfly_mod_t *mod,
                                        const void        *data,
                                        ssize_t            data_size);
-typedef mcfly_err_t (*mcfly_mod_queryfcn)(mcfly_mod_command_t command,
-                                          mcfly_mod_data_t    return_val);
+typedef mcfly_err_t (*mcfly_mod_queryfcn)(mcfly_mod_cmd_t   cmd,
+                                          mcfly_mod_data_t *data);
 
 
 /* Mcfly module structure
@@ -129,6 +130,9 @@ struct _mcfly_mod_t
 
     /* When this module is loaded dynamically the handle is placed here */
     void *dl_handle;
+
+    /* What type of module this is */
+    mcfly_mod_type_t type;
     
     /* Unique/module-specific configurations for this module.
      * The module is responsible for calling mcfly_cfg_load() and putting the

@@ -8,6 +8,8 @@
 #include <mcfly/error.h>
 #include <mcfly/type.h>
 #include <mcfly/util.h>
+#include <mcfly/modules/mod_commands.h>
+#include <mcfly/modules/mod_types.h>
 
 
 /* Are we to load this module? */
@@ -115,19 +117,19 @@ mcfly_mod_t *mcfly_mod_find(const mcfly_t mcfly, const char *module_name)
 
 
 mcfly_err_t mcfly_mod_query(
-    mcfly_mod       *mod, 
-    mcfly_mod_cmd_t  command.
-    mcfly_data_t     data)
+    mcfly_mod_t      *mod, 
+    mcfly_mod_cmd_t   cmd,
+    mcfly_mod_data_t *data)
 {
-    return mod->query(command, data);
+    return mod->query(cmd, data);
 }
 
 
 mcfly_err_t mcfly_mod_query_by_type(
-    const mcfly_t    mcfly,
-    mcfly_mod_type_t type,
-    mcfly_mod_cmd_t  cmd,
-    mcfly_mod_data_t data)
+    const mcfly_t     mcfly,
+    mcfly_mod_type_t  type,
+    mcfly_mod_cmd_t   cmd,
+    mcfly_mod_data_t *data)
 {
     mcfly_mod_t       *mod;
     mcfly_list_node_t *itr;
@@ -136,8 +138,8 @@ mcfly_err_t mcfly_mod_query_by_type(
     mod = NULL;
     for (itr=&mcfly->modules->list; itr; itr=itr->next)
     {
-        mod = mcfly_list_get(itr, mcfly_mod_t, list);
-        if (mod->type == mod_type)
+        mod = mcfly_util_list_get(itr, mcfly_mod_t, list);
+        if (mod->type == type)
           break;
     }
 
@@ -145,7 +147,7 @@ mcfly_err_t mcfly_mod_query_by_type(
       return MCFLY_ERR_NOMOD;
 
     /* Ask Jeeves */
-    return mcfly_mod_query(mod, mod_command, return_val);
+    return mcfly_mod_query(mod, cmd, data);
 }
 
 

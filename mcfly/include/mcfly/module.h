@@ -83,7 +83,7 @@ extern mcfly_mod_t *mcfly_mod_find(
 extern mcfly_err_t mcfly_mod_query(
     mcfly_mod_t      *mod,
     mcfly_mod_cmd_t   cmd,
-    mcfly_mod_data_t  data);
+    mcfly_mod_data_t *data);
 
 
 /* mcfly_mod_query_by_type
@@ -100,10 +100,10 @@ extern mcfly_err_t mcfly_mod_query(
  *
  * Returns MCFLY_SUCCESS on success, error otherwise.
  */
-extern mcfly_err_t mcfly_mod_query(
-    const mcfly_t    mcfly,
-    mcfly_mod_type_t type,
-    mcfly_mod_cmd_t  cmd,
-    mcfly_mod_data_t return_val);
+extern mcfly_err_t mcfly_mod_query_by_type(
+    const mcfly_t     mcfly,
+    mcfly_mod_type_t  type,
+    mcfly_mod_cmd_t   cmd,
+    mcfly_mod_data_t *data);
 
 #endif /* _MCFLY_MODULE_H */

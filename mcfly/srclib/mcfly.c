@@ -4,6 +4,8 @@
 #include <mcfly/mcfly.h>
 #include <mcfly/module.h>
 #include <mcfly/type.h>
+#include <mcfly/modules/mod_commands.h>
+#include <mcfly/modules/mod_types.h>
 
 
 #define ERR(_expr)            \
@@ -52,10 +54,22 @@ void mcfly_shutdown(mcfly_t mcfly)
 }
 
 
+/* Wrapper */
 mcfly_err_t mcfly_command(
-    mcfly_mod_t      mod, 
-    mcfly_cmd_t      cmd,
-    mcfly_mod_data_t data)
+    mcfly_mod_t      *mod, 
+    mcfly_mod_cmd_t   cmd,
+    mcfly_mod_data_t *data)
 {
-    return mod->query(cmd, data);
+    return mcfly_mod_query(mod, cmd, data);
+}
+
+
+/* Wrapper */
+mcfly_err_t mcfly_command_by_type(
+    mcfly_t           mcfly,
+    mcfly_mod_type_t  type, 
+    mcfly_mod_cmd_t   cmd,
+    mcfly_mod_data_t *data)
+{
+    return mcfly_mod_query_by_type(mcfly, type, cmd, data);
 }

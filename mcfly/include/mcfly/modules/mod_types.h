@@ -5,13 +5,13 @@
 typedef enum _mcfly_mod_type_t mcfly_mod_type_t;
 enum _mcfly_mod_type_t
 {
-    MCFLY_MOD_TYPE_DUMMY;
-    MCFLY_MOD_TYPE_OBD;
+    MCFLY_MOD_TYPE_DUMMY,
+    MCFLY_MOD_TYPE_OBD,
 };
 
 
 /* This is the data structure each module can return data in */
-typedef struct _mcfly_mod_data_t *mcfly_mod_data_t;
+typedef struct _mcfly_mod_data_t mcfly_mod_data_t;
 struct _mcfly_mod_data_t
 {
     /* Data can either be a numeric value, or an arbitray length blob  */

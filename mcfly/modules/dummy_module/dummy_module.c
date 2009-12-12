@@ -11,6 +11,7 @@
 #include <mcfly/error.h>
 #include <mcfly/mcfly.h>
 #include <mcfly/type.h>
+#include <mcfly/modules/mod_types.h>
 
 
 /* dummy_module
@@ -126,8 +127,10 @@ mcfly_mod_t MCFLY_MODULE_STRUCT_SYMBOL =
 {
     .name = "dummy_module",
     .dl_handle = NULL,
+    .type = MCFLY_MOD_TYPE_DUMMY,
     .configs = NULL,
     .init = dummy_init,
     .shutdown = dummy_shutdown,
+    .query = NULL,
     .recieve_callback = NULL,
 };
