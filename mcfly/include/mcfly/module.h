@@ -3,6 +3,8 @@
 
 #include <mcfly/error.h>
 #include <mcfly/type.h>
+#include <mcfly/modules/mod_commands.h>
+#include <mcfly/modules/mod_types.h>
 
 
 /* mcfly_mod_load
@@ -23,7 +25,7 @@ extern mcfly_err_t mcfly_mod_load(mcfly_t mcfly);
  *
  * mcfly: Mcfly handle
  *
- * Returns: MCFLY on success, error otherwise.
+ * Returns: MCFLY_SUCCESS on success, error otherwise.
  */
 extern mcfly_err_t mcfly_mod_init(const mcfly_t mcfly);
 
@@ -35,7 +37,7 @@ extern mcfly_err_t mcfly_mod_init(const mcfly_t mcfly);
  *
  * mcfly: Mcfly handle
  *
- * Returns: MCFLY on success, error otherwise.
+ * Returns: MCFLY_SUCCESS on success, error otherwise.
  */
 extern mcfly_err_t mcfly_mod_shutdown(const mcfly_t mcfly);
 
@@ -48,7 +50,7 @@ extern mcfly_err_t mcfly_mod_shutdown(const mcfly_t mcfly);
  * mod:      Module whom the callback is to accept data from
  * callback: Routine that is called with the recieved data and that data's size
  *
- * Returns: MCFLY on success, error otherwise.
+ * Returns: MCFLY_SUCCESS on success, error otherwise.
  */
 extern mcfly_err_t mcfly_mod_register_recieve(
     mcfly_mod_t           *mod,
@@ -67,5 +69,41 @@ extern mcfly_err_t mcfly_mod_register_recieve(
 extern mcfly_mod_t *mcfly_mod_find(
     const mcfly_t  mcfly,
     const char    *module_name);
+
+
+/* mcfly_mod_query
+ *
+ * Query the given module.
+ *
+ * mod: Module to query
+ * cmd: Command to query with
+ * data: Data to send or receive to/from the specified module
+ * Returns MCFLY_SUCCESS on success, error otherwise
+ */
+extern mcfly_err_t mcfly_mod_query(
+    mcfly_mod_t      *mod,
+    mcfly_mod_cmd_t   cmd,
+    mcfly_mod_data_t  data);
+
+
+/* mcfly_mod_query_by_type
+ *
+ * Send a command to a mcfly module.
+ * Only the first instance of the module type is used.
+ * If multiple instances of the same module type are used, and the second or
+ * later module instance is needed, use mcfly_mod_query_by_name()
+ *
+ * mcfly: Mcfly handle
+ * type:  Type of module to query    (see modules/mod_types.h)
+ * cmd:   Command to send the module (see modules/mod_commands.h)
+ * data:  Data to send or receive to/from the specified module
+ *
+ * Returns MCFLY_SUCCESS on success, error otherwise.
+ */
+extern mcfly_err_t mcfly_mod_query(
+    const mcfly_t    mcfly,
+    mcfly_mod_type_t type,
+    mcfly_mod_cmd_t  cmd,
+    mcfly_mod_data_t return_val);
 
 #endif /* _MCFLY_MODULE_H */

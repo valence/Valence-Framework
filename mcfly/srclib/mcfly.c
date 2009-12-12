@@ -53,12 +53,9 @@ void mcfly_shutdown(mcfly_t mcfly)
 
 
 mcfly_err_t mcfly_command(
-    mcfly_t      mcfly,
-    mcfly_mod_t  mod, 
-    mcfly_cmd_t  cmd,
-    void        *data,
-    size_t      *data_size)
+    mcfly_mod_t      mod, 
+    mcfly_cmd_t      cmd,
+    mcfly_mod_data_t data)
 {
-    /* TODO */
-    return MCFLY_SUCCESS;
+    return mod->query(cmd, data);
 }

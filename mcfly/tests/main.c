@@ -136,6 +136,14 @@ static mcfly_err_t test_reg_recv(void)
 }
 
 
+static mcfly_err_t test_query_obd(void)
+{
+    int value;
+
+    mcfly_mod_quer
+}
+
+
 /* Test Cases */
 typedef enum 
 {
@@ -143,6 +151,7 @@ typedef enum
     TEST_LIST_RM,
     TEST_INIT,
     TEST_REG_RECV,
+    TEST_QUERY_OBD,
 } test_id_t;
 
 
@@ -158,6 +167,7 @@ struct
     {"List Remove", TEST_LIST_RM, 0, test_list_rm},
     {"Initialization", TEST_INIT, 0, test_init},
     {"Register Receive", TEST_REG_RECV, 0, test_reg_recv}
+    {"Query OBD", TEST_QUERY_OBD, 0, test_query_obd}
 };
 
 

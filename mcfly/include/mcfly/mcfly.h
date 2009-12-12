@@ -45,20 +45,18 @@ extern void mcfly_shutdown(mcfly_t mcfly);
  * Issue a command to a Mcfly device
  *
  * mcfly:     Mcfly handle
- * dev:       Device to query
+ * mod:       Module/Device to query
  * cmd:       Command for device
  * data:      Input data to send, or Output data to receive
- * data_size: Amount of data input or output to or from 'dev'
  *
  * Returns: MCFLY_SUCCESS on success, error otherwise.
  *          If data is to be returned, it is placed
  *          in 'data'
  */
 extern mcfly_err_t mcfly_command(
-    mcfly_t      mcfly, 
-    mcfly_mod_t  mod,
-    mcfly_cmd_t  cmd,
-    void        *data,
-    size_t      *data_size);
+    const mcfly_t    mcfly, 
+    mcfly_mod_t      mod,
+    mcfly_mod_cmd_t  cmd,
+    mcfly_mod_data_t data);
 
 #endif /* _MCFLY_LIBRARY_H */

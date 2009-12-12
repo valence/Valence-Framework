@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <mcfly/error.h>
+#include <mcfly/modules/mod_commands.h>
 
 
 /*
@@ -34,14 +35,6 @@ struct _mcfly_t
     mcfly_cfg_t *configs;
     mcfly_mod_t *modules;
 };
-
-
-/*
- * Command
- */
-
-/* Command ID */
-typedef int mcfly_cmd_t;
 
 
 /*
@@ -120,6 +113,8 @@ typedef mcfly_err_t (*mcfly_mod_fcn)(const mcfly_t mcfly, mcfly_mod_t *me);
 typedef mcfly_err_t (*mcfly_mod_cbfcn)(const mcfly_mod_t *mod,
                                        const void        *data,
                                        ssize_t            data_size);
+typedef mcfly_err_t (*mcfly_mod_queryfcn)(mcfly_mod_command_t command,
+                                          mcfly_mod_data_t    return_val);
 
 
 /* Mcfly module structure
@@ -146,6 +141,9 @@ struct _mcfly_mod_t
 
     /* Shutdown the module */
     mcfly_mod_fcn shutdown;
+
+    /* Query the module */
+    mcfly_mod_queryfcn query;
 
     /* Callback: When data is recieved by this module,
      * this module must report that data to this callback routine.
