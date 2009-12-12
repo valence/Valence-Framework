@@ -59,12 +59,28 @@ static mcfly_err_t init(const mcfly_t mcfly, mcfly_mod_t *me)
 
 static mcfly_err_t shutdown(const mcfly_t mcfly, mcfly_mod_t *me)
 {
+    elm327_shutdown(elm327_mod_fd);
     return MCFLY_SUCCESS;
 }
 
 
 static mcfly_err_t get_speed(mcfly_mod_data_t *data)
 {
+    elm327_msg_t msg, *recv_msgs;
+
+    elm327_create_msg(msg, OBD_MODE_1, 0x0D);
+
+    /* Send */
+    if (elm327_send_msg(elm327_mod_fd, msg) == -1)
+      return MCFLY_ERR_CMDSEND;
+
+    /* Receive */
+    if ((recv_msgs = elm327_recv_msgs(elm327_mod_fd, NULL)) == NULL)
+      return MCFLY_ERR_MODRECV;
+
+    /* TODO Convert speed */
+    elm327_destroy_recv_msgs(recv_msgs);
+
     return MCFLY_SUCCESS;
 }
 

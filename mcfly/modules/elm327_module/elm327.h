@@ -64,20 +64,24 @@ extern void elm327_shutdown(int fd);
 
 
 extern void elm327_create_msg(
-    elm327_msg_t  msg,  /* The constructed message is stored here */
-    OBD_MODE   mode,
-    OBD_PARAM  pid);
+    elm327_msg_t msg,  /* The constructed message is stored here */
+    OBD_MODE     mode,
+    OBD_PARAM    pid);
 
 
 /* Take a msg and define it as ELM would represent (ascii).
  * Each hex digit is 1 ascii character.  So hexadecimal '0F' would be represented
  * as two ascii characters: '0' and 'F'
  */
-extern void elm327_msg_to_ascii(const elm327_msg_t msg, elm327_msg_as_ascii_t ascii);
+extern void elm327_msg_to_ascii(
+    const elm327_msg_t    msg,
+    elm327_msg_as_ascii_t ascii);
 
 
 /* Take ascii (ELM) version of a message and convert it to a binary format */
-extern void elm327_ascii_to_msg(const elm327_msg_as_ascii_t ascii, elm327_msg_t msg);
+extern void elm327_ascii_to_msg(
+    const elm327_msg_as_ascii_t ascii,
+    elm327_msg_t                msg);
 
 
 /* Send the 'created' message down the OBD-II device.  Upon success the amount

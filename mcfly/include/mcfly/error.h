@@ -31,6 +31,7 @@ _new_err_code(11, MCFLY_ERR_MODINIT,     "Module Initialization")
 _new_err_code(12, MCFLY_ERR_MODRECV,     "Receiving Data from Module")
 _new_err_code(13, MCFLY_ERR_MODTHREAD,   "Threading Module")
 _new_err_code(14, MCFLY_ERR_NOCMD,       "Command Not Supported")
+_new_err_code(15, MCFLY_ERR_CMDSEND,     "Error Sending Command")
 
 
 /* MCFLY_ERR_VAL

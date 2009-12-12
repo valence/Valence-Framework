@@ -93,9 +93,9 @@ void elm327_shutdown(int fd)
 
 
 void elm327_create_msg(
-    elm327_msg_t  msg,
-    OBD_MODE   mode,
-    OBD_PARAM  pid)
+    elm327_msg_t msg,
+    OBD_MODE     mode,
+    OBD_PARAM    pid)
 {
     memset(msg, 0, sizeof(elm327_msg_t));
 
