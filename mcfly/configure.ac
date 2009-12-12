@@ -37,5 +37,5 @@ AC_CONFIG_FILES([Makefile
                  tests/Makefile
                  modules/Makefile
                  modules/dummy_module/Makefile
-                 modules/elm_module/Makefile])
+                 modules/elm327_module/Makefile])
 AC_OUTPUT
