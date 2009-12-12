@@ -1,8 +1,11 @@
 #include <stdlib.h>
+#include <string.h>
 #include <mcfly/error.h>
 #include <mcfly/config.h>
 #include <mcfly/mcfly.h>
 #include <mcfly/type.h>
+#include <mcfly/modules/mod_commands.h>
+#include <mcfly/modules/mod_types.h>
 #include "elm327.h"
 
 
@@ -57,12 +60,21 @@ static mcfly_err_t elm_shutdown(const mcfly_t mcfly, mcfly_mod_t *me)
 }
 
 
+static mcfly_err_t query(mcfly_mod_cmd_t cmd, mcfly_mod_data_t *data)
+{
+    memset(data, 0, sizeof(mcfly_mod_data_t));
+    return MCFLY_SUCCESS;
+}
+
+
 mcfly_mod_t MCFLY_MODULE_STRUCT_SYMBOL =
 {
     .name = "elm_module",
     .dl_handle = NULL,
+    .type = MCFLY_MOD_TYPE_OBD,
     .configs = NULL,
     .init = elm_init,
     .shutdown = elm_shutdown,
     .recieve_callback = NULL,
+    .query = query,
 };
