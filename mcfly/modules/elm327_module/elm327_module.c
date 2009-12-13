@@ -79,7 +79,7 @@ static mcfly_err_t get_speed(mcfly_mod_data_t *data)
       return MCFLY_ERR_MODRECV;
 
     /* Convert speed (first byte is speed in kph) */
-    data->value = (double)((*recv_msg)[0]);
+    data->value = (double)((*recv_msg)[2]);
 
     elm327_destroy_recv_msgs(recv_msg);
 
