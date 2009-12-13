@@ -42,6 +42,15 @@ extern mcfly_err_t mcfly_mod_init(const mcfly_t mcfly);
 extern mcfly_err_t mcfly_mod_shutdown(const mcfly_t mcfly);
 
 
+/* mcfly_mod_data_destroy
+ *
+ * Release the resources acquired by this object.
+ * After every query for data, this should be called on the result, once that
+ * result object is no longer needed.
+ */
+extern mcfly_mod_data_destroy(mcfly_mod_data_t *data);
+
+
 /* mcfly_mod_register_recieve
  *
  * Register a routine to be called when the module recieves data.

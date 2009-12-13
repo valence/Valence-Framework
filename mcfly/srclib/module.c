@@ -12,6 +12,18 @@
 #include <mcfly/modules/mod_types.h>
 
 
+void mcfly_mod_data_destroy(mcfly_mod_data_t *data)
+{
+    if (!data)
+      return;
+
+    if (data->binary_size == 0)
+      return;
+    else
+      free(data);
+}
+
+
 /* Are we to load this module? */
 static int do_load(const mcfly_t mcfly, const char *module_name)
 {
