@@ -12,7 +12,7 @@
 #include <mcfly/modules/mod_types.h>
 
 
-void mcfly_mod_data_destroy(mcfly_mod_data_t *data)
+void mcfly_mod_destroy_data(mcfly_mod_data_t *data)
 {
     if (!data)
       return;
