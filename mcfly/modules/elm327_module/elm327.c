@@ -5,6 +5,7 @@
 #include <fcntl.h>
 #include <termios.h>
 #include <unistd.h>
+#include <sys/select.h>
 #include "elm327.h"
 
 
@@ -18,6 +19,10 @@
 /* Global serial configurations for OBD device */
 struct termios elm327_termios;
 struct termios elm327_termios_original;
+
+
+/* Seconds to wait until we give up listening */
+unsigned int elm327_timeout_seconds = 1;
 
 
 /* 
@@ -92,6 +97,12 @@ void elm327_shutdown(int fd)
 }
 
 
+void elm327_set_timeout(unsigned int seconds)
+{
+    elm327_timeout_seconds = seconds;
+}
+
+
 void elm327_create_msg(
     elm327_msg_t msg,
     OBD_MODE     mode,
@@ -160,10 +171,25 @@ int elm327_send_msg(int fd, elm327_msg_t msg)
 
 elm327_msg_t *elm327_recv_msgs(int fd, int *n_msgs)
 {
-    int                 msg_idx, char_idx, i, n_lines;
-    char                c, prev, *st, *look, buf[256] = {0};
+    int                    msg_idx, char_idx, i, n_lines;
+    char                   c, prev, *st, *look, buf[256] = {0};
+    fd_set                 recv_fds;
+    struct timeval         timeout;
     elm327_msg_t          *msgs;
     elm327_msg_as_ascii_t *ascii_msgs;
+
+    if (n_msgs)
+      n_msgs = 0;
+
+    /* Wait until we find some data on the line */
+    if (elm327_timeout_seconds > 0)
+    {
+        FD_ZERO(&recv_fds);
+        FD_SET(fd, &recv_fds);
+        timeout = (struct timeval){elm327_timeout_seconds, 0};
+        if (select(fd + 1, &recv_fds, NULL, NULL, &timeout) <= 0)
+          return NULL;
+    }
 
     /* Recieve the data */
     prev = 0;

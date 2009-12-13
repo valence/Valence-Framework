@@ -42,6 +42,10 @@ extern struct termios elm327_termios;
 extern struct termios elm327_termios_original;
 
 
+/* Seconds to wait until we give up listening */
+extern unsigned int elm327_timeout_seconds;
+
+
 /* Message structure (ELM takes ascii) 
  * OBD-II standard says the data portion of a message is at max 7 bytes, 8
  * seems more alignable.  We are ignoring headers, and let ELM do that.  So
@@ -61,6 +65,12 @@ extern int elm327_init(const char *device_path);
 
 /* Takes the file descriptor (ideally returned from elm327_init) */
 extern void elm327_shutdown(int fd);
+
+
+/* Seconds to wait before we give-up waiting for recieved data 
+ * If this value is '0' then we can wait indefinitely
+ */
+extern void elm327_set_timeout(unsigned int seconds);
 
 
 extern void elm327_create_msg(
