@@ -25,6 +25,9 @@
  */
 
 
+#define MCFLY_CONFIG_DEFAULT_NAME "mcfly.config"
+
+
 /* Global config definitions */
 static const mcfly_cfg_def_t mcfly_cfg_base_configs[] = 
 {

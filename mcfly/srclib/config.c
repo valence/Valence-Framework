@@ -58,6 +58,10 @@ mcfly_cfg_t *mcfly_cfg_load(
     if (!config)
       config = mcfly->base_config_path;
 
+    /* Still no config file, base_config was empty, so default */
+    if (!config)
+      config = MCFLY_CONFIG_DEFAULT_NAME;
+
     if ((whoops = load_config(config, cfg, defs, n_defs)) != MCFLY_SUCCESS)
     {
         if (err)
