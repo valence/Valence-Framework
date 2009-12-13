@@ -19,6 +19,10 @@
 #define MCFLY_ARRAY_SIZE(_a) (sizeof(_a)/sizeof(_a[0]))
 
 
+/* Conversions */
+#define MCFLY_KPH_TO_MPH(_kph) (_kph * 0.621371192)
+
+
 
 /* mcfly_init
  *
