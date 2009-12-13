@@ -20,7 +20,7 @@ extern mcfly_err_t mcfly_mod_load(mcfly_t mcfly);
 
 /* mcfly_mod_init
  *
- * Initalize the list of modules
+ * Initialize the list of modules
  * The mcfly_init() routine handles this automatically.
  *
  * mcfly: Mcfly handle
@@ -51,13 +51,13 @@ extern mcfly_err_t mcfly_mod_shutdown(const mcfly_t mcfly);
 extern void mcfly_mod_destroy_data(mcfly_mod_data_t *data);
 
 
-/* mcfly_mod_register_recieve
+/* mcfly_mod_register_receive
  *
- * Register a routine to be called when the module recieves data.
+ * Register a routine to be called when the module receives data.
  * Only one routine can be registered.
  *
  * mod:      Module whom the callback is to accept data from
- * callback: Routine that is called with the recieved data and that data's size
+ * callback: Routine that is called with the received data and that data's size
  *
  * Returns: MCFLY_SUCCESS on success, error otherwise.
  */

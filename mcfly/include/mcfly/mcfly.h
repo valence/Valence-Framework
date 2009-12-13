@@ -26,7 +26,7 @@
 
 /* mcfly_init
  *
- * Initalize the Mcfly library.
+ * Initialize the Mcfly library.
  *
  * config:  Path to a Mcfly configuration file
  * mcfly:   Pointer to a non-allocated handle, this routine
