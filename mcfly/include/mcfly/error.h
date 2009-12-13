@@ -1,6 +1,9 @@
 #ifndef _MCFLY_ERROR_H
 #define _MCFLY_ERROR_H
 
+#include <stdlib.h>
+
+
 /* Error codes in McFly are actually structures of the value and its
  * corresponding description.  When error codes are compared, since they are
  * static, just the addresses get compared.  When you print an error code or
