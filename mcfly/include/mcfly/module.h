@@ -48,7 +48,7 @@ extern mcfly_err_t mcfly_mod_shutdown(const mcfly_t mcfly);
  * After every query for data, this should be called on the result, once that
  * result object is no longer needed.
  */
-extern mcfly_mod_data_destroy(mcfly_mod_data_t *data);
+extern void mcfly_mod_data_destroy(mcfly_mod_data_t *data);
 
 
 /* mcfly_mod_register_recieve
