@@ -38,7 +38,7 @@ static const mcfly_cfg_def_t elm327_mod_configs[] =
 };
 
 
-static mcfly_err_t init(const mcfly_t mcfly, mcfly_mod_t *me)
+static mcfly_err_t elm327_mod_init(const mcfly_t mcfly, mcfly_mod_t *me)
 {
     int        *timeout;
     const char *dev;
@@ -119,7 +119,7 @@ mcfly_mod_t MCFLY_MODULE_STRUCT_SYMBOL =
     .dl_handle = NULL,
     .type = MCFLY_MOD_TYPE_OBD,
     .configs = NULL,
-    .init = init,
+    .init = elm327_mod_init,
     .shutdown = shutdown,
     .recieve_callback = NULL,
     .query = query,
