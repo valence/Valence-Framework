@@ -12,3 +12,6 @@ $(APP):
 
 test: $(APP)
 	LD_LIBRARY_PATH=$(LIBPATH) ./$(APP)
+
+clean:
+	rm -rfv $(APP)
