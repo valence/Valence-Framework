@@ -99,6 +99,29 @@ static mcfly_err_t get_speed(mcfly_mod_data_t *data)
 }
 
 
+static mcfly_err_t get_rpm(mcfly_mod_data_t *data)
+{
+    elm327_msg_t msg, *recv_msg;
+
+    elm327_create_msg(msg, OBD_MODE_1, 0x0C);
+
+    /* Send */
+    if (elm327_send_msg(elm327_mod_fd, msg) == -1)
+      return MCFLY_ERR_CMDSEND;
+
+    /* Receive */
+    if ((recv_msg = elm327_recv_msgs(elm327_mod_fd, NULL)) == NULL)
+      return MCFLY_ERR_MODRECV;
+
+    /* Convert RPM */
+    data->value = (((*recv_msg)[2] * 256) * *recv_msg[3]) / 4.0;
+
+    elm327_destroy_recv_msgs(recv_msg);
+
+    return MCFLY_SUCCESS;
+}
+
+
 static mcfly_err_t query(mcfly_mod_cmd_t cmd, mcfly_mod_data_t *data)
 {
     memset(data, 0, sizeof(mcfly_mod_data_t));
@@ -106,6 +129,7 @@ static mcfly_err_t query(mcfly_mod_cmd_t cmd, mcfly_mod_data_t *data)
     switch (cmd)
     {
         case MCFLY_MOD_CMD_OBD_SPEED: return get_speed(data);
+        case MCFLY_MOD_CMD_OBD_RPM: return get_rpm(data);
         default: return MCFLY_ERR_NOCMD;
     }
 

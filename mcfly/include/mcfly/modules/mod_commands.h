@@ -10,6 +10,7 @@ enum _mcfly_mod_cmd_t
 
     /* OBD Commands */
     MCFLY_MOD_CMD_OBD_SPEED,
+    MCFLY_MOD_CMD_OBD_RPM,
 };
 
 #endif /* _MCFLY_MODULES_COMMANDS_H */
