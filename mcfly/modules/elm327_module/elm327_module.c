@@ -28,15 +28,19 @@ static int elm327_mod_fd = -1;
 
 /* Configurations */
 #define ELM_MOD_CFG_DEV_PATH 1
+#define ELM_MOD_CFG_TIMEOUT  2
 static const mcfly_cfg_def_t elm327_mod_configs[] = 
 {
     {"elm327_mod_dev_path", "Path to ELM device",
      ELM_MOD_CFG_DEV_PATH, MCFLY_CFG_VALUE_STRING},
+    {"elm327_mod_timeout", "Timeout for receiving data (seconds)",
+     ELM_MOD_CFG_TIMEOUT, MCFLY_CFG_VALUE_INT},
 };
 
 
 static mcfly_err_t init(const mcfly_t mcfly, mcfly_mod_t *me)
 {
+    int        *timeout;
     const char *dev;
 
     /* Load the configs */
@@ -47,11 +51,19 @@ static mcfly_err_t init(const mcfly_t mcfly, mcfly_mod_t *me)
                                  NULL);
 
     /* Look for the device path from the configs */
-    if (!(dev = mcfly_cfg_get_from_name(me->configs, "elm327_mod_dev_path")))
+    if (!(dev = mcfly_cfg_get_from_key(me->configs, ELM_MOD_CFG_DEV_PATH)))
       dev = ELM_MOD_DEFAULT_DEV;
 
     if ((elm327_mod_fd = elm327_init(dev)) < 0)
       return MCFLY_ERR_MODINIT;
+
+    /* Set the timeout for ELM (if it was set via config) else we will just use
+     * the ELM default */
+    if ((timeout = (int *)mcfly_cfg_get_from_key(me->configs,
+                                                 ELM_MOD_CFG_TIMEOUT)))
+    {
+        elm327_set_timeout(*timeout);
+    }
 
     return MCFLY_SUCCESS;
 }
