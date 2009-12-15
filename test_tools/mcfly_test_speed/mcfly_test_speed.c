@@ -6,11 +6,30 @@
 #include <mcfly/modules/mod_commands.h>
 
 
+void query(mcfly_t handle, mcfly_mod_cmd_t cmd, mcfly_mod_data_t *data)
+{
+    mcfly_err_t err;
+
+    err = mcfly_command_by_type(handle,
+                                MCFLY_MOD_TYPE_OBD, 
+                                cmd,
+                                data);
+
+    if (err != MCFLY_SUCCESS)
+    {
+        fprintf(stderr, "Could not query the OBD module: %s\n",
+                MCFLY_ERR_STR(err));
+        mcfly_shutdown(handle);
+        exit(-1);
+    }
+}
+
+
 int main(void)
 {
     mcfly_t          handle;
     mcfly_err_t      err;
-    mcfly_mod_data_t data;
+    mcfly_mod_data_t data_kph, data_rpm;
 
     /* Initalize Mcfly using the default-named config file in this directory */
     err = mcfly_init(NULL, &handle);
@@ -21,28 +40,22 @@ int main(void)
         return -1;
     }
 
-    /* Query the OBD module for speed */
-    err = mcfly_command_by_type(handle,
-                                MCFLY_MOD_TYPE_OBD, 
-                                MCFLY_MOD_CMD_OBD_SPEED,
-                                &data);
-    if (err != MCFLY_SUCCESS)
-    {
-        fprintf(stderr, "Could not query the OBD module: %s\n",
-                MCFLY_ERR_STR(err));
-        mcfly_shutdown(handle);
-        return -1;
-    }
+    /* Query the OBD module */
+    query(handle, MCFLY_MOD_CMD_OBD_SPEED, &data_kph);
+    query(handle, MCFLY_MOD_CMD_OBD_RPM, &data_rpm);
 
     /* Check the resulting data for speed:
      * Note: We know that the speed is stored in the 'value' and not the
      * 'binary' member of the data object.
      */
-    printf("You are crusing at: %fkph or %fmph\n",
-           data.value, MCFLY_KPH_TO_MPH(data.value));
-
+    printf("You are crusing at: %.02fkph or %fmph at %d\n",
+           data_kph.value,
+           MCFLY_KPH_TO_MPH(data_kph.value),
+           (int)data_rpm.value);
+           
     /* Free the data result */
-    mcfly_mod_destroy_data(&data);
+    mcfly_mod_destroy_data(&data_kph);
+    mcfly_mod_destroy_data(&data_rpm);
 
     /* Shutdown Mcfly */
     mcfly_shutdown(handle);
