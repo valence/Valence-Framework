@@ -48,7 +48,7 @@ int main(void)
      * Note: We know that the speed is stored in the 'value' and not the
      * 'binary' member of the data object.
      */
-    printf("You are crusing at: %.02fkph or %fmph at %d\n",
+    printf("%.02f, %0.2f, %d\n",
            data_kph.value,
            MCFLY_KPH_TO_MPH(data_kph.value),
            (int)data_rpm.value);
