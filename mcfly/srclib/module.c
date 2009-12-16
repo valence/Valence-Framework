@@ -12,6 +12,17 @@
 #include <mcfly/modules/mod_types.h>
 
 
+mcfly_mod_data_t *mcfly_mod_data_create(size_t size)
+{
+    mcfly_mod_data_t *data;
+
+    if (!(data = calloc(1, size)))
+      return NULL;
+
+    return data;
+}
+
+
 void mcfly_mod_destroy_data(mcfly_mod_data_t *data)
 {
     if (!data)

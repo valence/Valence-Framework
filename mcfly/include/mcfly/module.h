@@ -42,6 +42,22 @@ extern mcfly_err_t mcfly_mod_init(const mcfly_t mcfly);
 extern mcfly_err_t mcfly_mod_shutdown(const mcfly_t mcfly);
 
 
+/* mcfly_mod_data_create
+ *
+ * Create a mod_data_object to hold 'size' bytes of binary data.
+ * If the binary portion of this object is not needed, than this call is
+ * superfluous.  Such a case would be if only the 'value' field in the data
+ * object is needed.
+ *
+ * Returns: Dynamically allocated data object.  The memory region returned is
+ * zero'd and contigious. The binary portion (the 'binary' field) can then be
+ * filled-up to the specified amount of data.  'mcfly_mod_data_destroy()'
+ * should be called on this object when it is no longer needed.  NULL is
+ * returned on error.
+ */
+extern mcfly_mod_data_t *mcfly_mod_data_create(size_t size);
+
+
 /* mcfly_mod_data_destroy
  *
  * Release the resources acquired by this object.
