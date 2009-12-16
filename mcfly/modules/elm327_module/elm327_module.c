@@ -153,6 +153,21 @@ static mcfly_err_t get_throttle_pos(mcfly_mod_data_t *data)
 }
 
 
+static mcfly_err_t get_standards(mcfly_mod_data_t *data)
+{
+    elm327_msg_t *recv_msg = NULL;
+
+    QUERY_OR_ERR(OBD_MODE_1, 0x1C, &recv_msg, NULL);
+
+    /* Bit encoded standards supported */
+    data->binary_size = 1;
+    data->binary[0] = (*recv_msg)[2];
+    elm327_destroy_recv_msgs(recv_msg);
+
+    return MCFLY_SUCCESS;
+}
+
+
 static mcfly_err_t get_ambient_air(mcfly_mod_data_t *data)
 {
     elm327_msg_t *recv_msg = NULL;
@@ -176,6 +191,7 @@ static mcfly_err_t query(mcfly_mod_cmd_t cmd, mcfly_mod_data_t *data)
         case MCFLY_MOD_CMD_OBD_SPEED: return get_speed(data);
         case MCFLY_MOD_CMD_OBD_RPM: return get_rpm(data);
         case MCFLY_MOD_CMD_OBD_THROTTLE_POS: return get_throttle_pos(data);
+        case MCFLY_MOD_CMD_OBD_STANDARDS: return get_standards(data);
         case MCFLY_MOD_CMD_OBD_AMBIENT_AIR: return get_ambient_air(data);
         default: return MCFLY_ERR_NOCMD;
     }
