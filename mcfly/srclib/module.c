@@ -17,7 +17,7 @@ void mcfly_mod_destroy_data(mcfly_mod_data_t *data)
     if (!data)
       return;
 
-    if (data->binary_size == 0)
+    if (data->binary_size <= 1)
       return;
     else
       free(data);
