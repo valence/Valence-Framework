@@ -3,6 +3,7 @@
 #include <mcfly/error.h>
 #include <mcfly/config.h>
 #include <mcfly/mcfly.h>
+#include <mcfly/module.h>
 #include <mcfly/type.h>
 #include <mcfly/modules/mod_commands.h>
 #include <mcfly/modules/mod_types.h>
@@ -182,6 +183,36 @@ static mcfly_err_t get_ambient_air(mcfly_mod_data_t *data)
 }
 
 
+static mcfly_err_t get_vin(mcfly_mod_data_t *data)
+{
+    int           i, j, n_msgs;
+    mcfly_err_t   err;
+    elm327_msg_t *recv_msgs = NULL;
+
+    QUERY_OR_ERR(OBD_MODE_9, 0x02, &recv_msgs, &n_msgs);
+
+    /* Need 5 rows or messages */
+    if (n_msgs < 5)
+      return MCFLY_ERR_NOCMD;
+
+    /* Five rows of values with bytes 3,4,5,6 from each row */
+    if ((err = mcfly_mod_data_initialize(data, 6 * 5)) != MCFLY_SUCCESS)
+    {
+        elm327_destroy_recv_msgs(recv_msgs);
+        return err;
+    }
+
+    for (i=0; i<5; ++i)
+      for (j=3; j<6; ++j)
+        data->binary[(j*5) + (i-3)] = recv_msgs[j][i];
+    
+    /* VIN bytes 3,4,5,6 (byte 2 is line order) */
+    elm327_destroy_recv_msgs(recv_msgs);
+
+    return MCFLY_SUCCESS;
+}
+
+
 static mcfly_err_t query(mcfly_mod_cmd_t cmd, mcfly_mod_data_t *data)
 {
     memset(data, 0, sizeof(mcfly_mod_data_t));
@@ -193,6 +224,7 @@ static mcfly_err_t query(mcfly_mod_cmd_t cmd, mcfly_mod_data_t *data)
         case MCFLY_MOD_CMD_OBD_THROTTLE_POS: return get_throttle_pos(data);
         case MCFLY_MOD_CMD_OBD_STANDARDS: return get_standards(data);
         case MCFLY_MOD_CMD_OBD_AMBIENT_AIR: return get_ambient_air(data);
+        case MCFLY_MOD_CMD_OBD_VIN: return get_vin(data);
         default: return MCFLY_ERR_NOCMD;
     }
 
