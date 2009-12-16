@@ -18,7 +18,7 @@ struct _mcfly_mod_data_t
     double value;
 
     size_t binary_size;
-    unsigned char binary[1];
+    unsigned char *binary;
 };
 
 #endif /* _MCFLY_MODULES_TYPES_H */
