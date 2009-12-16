@@ -12,7 +12,7 @@
 #include <mcfly/modules/mod_types.h>
 
 
-mcfly_mod_data_t *mcfly_mod_data_create(size_t size)
+mcfly_mod_data_t *mcfly_mod_create_data(size_t size)
 {
     mcfly_mod_data_t *data;
 

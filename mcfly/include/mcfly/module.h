@@ -42,7 +42,7 @@ extern mcfly_err_t mcfly_mod_init(const mcfly_t mcfly);
 extern mcfly_err_t mcfly_mod_shutdown(const mcfly_t mcfly);
 
 
-/* mcfly_mod_data_create
+/* mcfly_mod_create_data
  *
  * Create a mod_data_object to hold 'size' bytes of binary data.
  * If the binary portion of this object is not needed, than this call is
@@ -51,14 +51,14 @@ extern mcfly_err_t mcfly_mod_shutdown(const mcfly_t mcfly);
  *
  * Returns: Dynamically allocated data object.  The memory region returned is
  * zero'd and contigious. The binary portion (the 'binary' field) can then be
- * filled-up to the specified amount of data.  'mcfly_mod_data_destroy()'
+ * filled-up to the specified amount of data.  'mcfly_mod_destroy_data()'
  * should be called on this object when it is no longer needed.  NULL is
  * returned on error.
  */
-extern mcfly_mod_data_t *mcfly_mod_data_create(size_t size);
+extern mcfly_mod_data_t *mcfly_mod_create_data(size_t size);
 
 
-/* mcfly_mod_data_destroy
+/* mcfly_mod_destroy_data
  *
  * Release the resources acquired by this object.
  * After every query for data, this should be called on the result, once that
