@@ -33,6 +33,7 @@ static const mcfly_cfg_def_t elm327_mod_configs[] =
 {
     {"elm327_mod_dev_path", "Path to ELM device",
      ELM_MOD_CFG_DEV_PATH, MCFLY_CFG_VALUE_STRING},
+
     {"elm327_mod_timeout", "Timeout for receiving data (seconds)",
      ELM_MOD_CFG_TIMEOUT, MCFLY_CFG_VALUE_INT},
 };
@@ -76,23 +77,41 @@ static mcfly_err_t shutdown(const mcfly_t mcfly, mcfly_mod_t *me)
 }
 
 
+static mcfly_err_t query_elm(
+    OBD_MODE       mode,
+    OBD_PARAM      pid,
+    elm327_msg_t **msgs,   /* Returned data from ELM327   */
+    int           *n_msgs) /* Number of messages returned */
+{
+    elm327_msg_t send_msg;
+
+    elm327_create_msg(send_msg, mode, pid);
+    
+    /* Send */
+    if (elm327_send_msg(elm327_mod_fd, send_msg) == -1)
+      return MCFLY_ERR_CMDSEND;
+    
+    /* Receive */
+    if ((*msgs = elm327_recv_msgs(elm327_mod_fd, n_msgs)) == NULL)
+      return MCFLY_ERR_MODRECV;
+
+    return MCFLY_SUCCESS;
+}
+
+
 static mcfly_err_t get_speed(mcfly_mod_data_t *data)
 {
-    elm327_msg_t msg, *recv_msg;
+    mcfly_err_t   err;
+    elm327_msg_t *recv_msg = NULL;
 
-    elm327_create_msg(msg, OBD_MODE_1, 0x0D);
-
-    /* Send */
-    if (elm327_send_msg(elm327_mod_fd, msg) == -1)
-      return MCFLY_ERR_CMDSEND;
-
-    /* Receive */
-    if ((recv_msg = elm327_recv_msgs(elm327_mod_fd, NULL)) == NULL)
-      return MCFLY_ERR_MODRECV;
+    if ((err = query_elm(OBD_MODE_1, 0x0D, &recv_msg, NULL)) != MCFLY_SUCCESS)
+    {
+        elm327_destroy_recv_msgs(recv_msg);
+        return err;
+    }
 
     /* Convert speed (first byte is speed in kph) */
     data->value = (double)((*recv_msg)[2]);
-
     elm327_destroy_recv_msgs(recv_msg);
 
     return MCFLY_SUCCESS;
@@ -101,21 +120,17 @@ static mcfly_err_t get_speed(mcfly_mod_data_t *data)
 
 static mcfly_err_t get_rpm(mcfly_mod_data_t *data)
 {
-    elm327_msg_t msg, *recv_msg;
+    mcfly_err_t   err;
+    elm327_msg_t *recv_msg = NULL;
 
-    elm327_create_msg(msg, OBD_MODE_1, 0x0C);
-
-    /* Send */
-    if (elm327_send_msg(elm327_mod_fd, msg) == -1)
-      return MCFLY_ERR_CMDSEND;
-
-    /* Receive */
-    if ((recv_msg = elm327_recv_msgs(elm327_mod_fd, NULL)) == NULL)
-      return MCFLY_ERR_MODRECV;
+    if ((err = query_elm(OBD_MODE_1, 0x0C, &recv_msg, NULL)) != MCFLY_SUCCESS)
+    {
+        elm327_destroy_recv_msgs(recv_msg);
+        return err;
+    }
 
     /* Convert RPM */
-    data->value = (((*recv_msg)[2] * 256) * *recv_msg[3]) / 4.0;
-
+    data->value = (((*recv_msg)[2] * 256) * (*recv_msg[3])) / 4.0;
     elm327_destroy_recv_msgs(recv_msg);
 
     return MCFLY_SUCCESS;
