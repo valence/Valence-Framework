@@ -12,28 +12,29 @@
 #include <mcfly/modules/mod_types.h>
 
 
-mcfly_mod_data_t *mcfly_mod_create_data(size_t size)
+mcfly_err_t mcfly_mod_data_initialize(mcfly_mod_data_t *data, size_t size)
 {
-    mcfly_mod_data_t *data;
+    memset(data, 0, sizeof(mcfly_mod_data_t));
 
-    if (!(data = calloc(1, size)))
-      return NULL;
+    if (size)
+    {
+        if (!(data->binary = calloc(1, size)))
+          return MCFLY_ERR_NOMEM;
+        data->binary_size = size;
+    }
 
-    data->binary_size = size;
-
-    return data;
+    return MCFLY_SUCCESS;
 }
 
 
-void mcfly_mod_destroy_data(mcfly_mod_data_t *data)
+void mcfly_mod_data_destroy(mcfly_mod_data_t *data)
 {
-    if (!data)
+    if (!data->binary_size)
       return;
 
-    if (data->binary_size <= 1)
-      return;
-    else
-      free(data);
+    data->binary_size = 0;
+    free(data->binary);
+    memset(data, 0, sizeof(mcfly_mod_data_t));
 }
 
 

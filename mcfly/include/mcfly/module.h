@@ -42,29 +42,29 @@ extern mcfly_err_t mcfly_mod_init(const mcfly_t mcfly);
 extern mcfly_err_t mcfly_mod_shutdown(const mcfly_t mcfly);
 
 
-/* mcfly_mod_create_data
+/* mcfly_mod_data_initialize
  *
- * Create a mod_data_object to hold 'size' bytes of binary data.
+ * This routine takes an already allocated/stack'd 'mcfly_data_t' and allocates
+ * its binary field/member.  The object is also zero'd.
+ *
  * If the binary portion of this object is not needed, than this call is
- * superfluous.  Such a case would be if only the 'value' field in the data
- * object is needed.
+ * superfluous, aside from the zeroing it does across the whole object.  Such a
+ * case would be if only the 'value' field in the data object is needed.
  *
- * Returns: Dynamically allocated data object.  The memory region returned is
- * zero'd and contigious. The binary portion (the 'binary' field) can then be
- * filled-up to the specified amount of data.  'mcfly_mod_destroy_data()'
- * should be called on this object when it is no longer needed.  NULL is
- * returned on error.
+ * Returns: MCFLY_SUCCESS on success, error otherwise.
  */
-extern mcfly_mod_data_t *mcfly_mod_create_data(size_t size);
+extern mcfly_err_t mcfly_mod_data_initialize(
+    mcfly_mod_data_t *data,
+    size_t            binary_size);
 
 
-/* mcfly_mod_destroy_data
+/* mcfly_mod_data_destory
  *
- * Release the resources acquired by this object.
+ * Release the resources acquired by this object's binary field.
  * After every query for data, this should be called on the result, once that
  * result object is no longer needed.
  */
-extern void mcfly_mod_destroy_data(mcfly_mod_data_t *data);
+extern void mcfly_mod_data_destroy(mcfly_mod_data_t *data);
 
 
 /* mcfly_mod_register_receive

@@ -54,8 +54,8 @@ int main(void)
            (int)data_rpm.value);
            
     /* Free the data result */
-    mcfly_mod_destroy_data(&data_kph);
-    mcfly_mod_destroy_data(&data_rpm);
+    mcfly_mod_data_destroy(&data_kph);
+    mcfly_mod_data_destroy(&data_rpm);
 
     /* Shutdown Mcfly */
     mcfly_shutdown(handle);
