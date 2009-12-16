@@ -99,16 +99,23 @@ static mcfly_err_t query_elm(
 }
 
 
+#define QUERY_OR_ERR(_mode, _pid, _recv, _n_recv)                         \
+{                                                                         \
+    mcfly_err_t _err;                                                     \
+                                                                          \
+    if ((_err = query_elm(_mode, _pid, _recv, _n_recv)) != MCFLY_SUCCESS) \
+    {                                                                     \
+        elm327_destroy_recv_msgs(*_recv);                                 \
+        return _err;                                                      \
+    }                                                                     \
+}
+
+
 static mcfly_err_t get_speed(mcfly_mod_data_t *data)
 {
-    mcfly_err_t   err;
     elm327_msg_t *recv_msg = NULL;
 
-    if ((err = query_elm(OBD_MODE_1, 0x0D, &recv_msg, NULL)) != MCFLY_SUCCESS)
-    {
-        elm327_destroy_recv_msgs(recv_msg);
-        return err;
-    }
+    QUERY_OR_ERR(OBD_MODE_1, 0x0D, &recv_msg, NULL);
 
     /* Convert speed (first byte is speed in kph) */
     data->value = (double)((*recv_msg)[2]);
@@ -120,17 +127,26 @@ static mcfly_err_t get_speed(mcfly_mod_data_t *data)
 
 static mcfly_err_t get_rpm(mcfly_mod_data_t *data)
 {
-    mcfly_err_t   err;
     elm327_msg_t *recv_msg = NULL;
 
-    if ((err = query_elm(OBD_MODE_1, 0x0C, &recv_msg, NULL)) != MCFLY_SUCCESS)
-    {
-        elm327_destroy_recv_msgs(recv_msg);
-        return err;
-    }
+    QUERY_OR_ERR(OBD_MODE_1, 0x0C, &recv_msg, NULL);
 
     /* Convert RPM */
     data->value = (((*recv_msg)[2] * 256) * (*recv_msg[3])) / 4.0;
+    elm327_destroy_recv_msgs(recv_msg);
+
+    return MCFLY_SUCCESS;
+}
+
+
+static mcfly_err_t get_throttle_pos(mcfly_mod_data_t *data)
+{
+    elm327_msg_t *recv_msg = NULL;
+
+    QUERY_OR_ERR(OBD_MODE_1, 0x11, &recv_msg, NULL);
+
+    /* Convert throttle position */
+    data->value = ((*recv_msg)[2] * 100.0) / 255.0;
     elm327_destroy_recv_msgs(recv_msg);
 
     return MCFLY_SUCCESS;
@@ -145,6 +161,7 @@ static mcfly_err_t query(mcfly_mod_cmd_t cmd, mcfly_mod_data_t *data)
     {
         case MCFLY_MOD_CMD_OBD_SPEED: return get_speed(data);
         case MCFLY_MOD_CMD_OBD_RPM: return get_rpm(data);
+        case MCFLY_MOD_CMD_OBD_THROTTLE_POS: return get_throttle_pos(data);
         default: return MCFLY_ERR_NOCMD;
     }
 
