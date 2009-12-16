@@ -29,7 +29,8 @@ int main(void)
 {
     mcfly_t          handle;
     mcfly_err_t      err;
-    mcfly_mod_data_t data_kph, data_rpm;
+    mcfly_mod_data_t data_kph, data_rpm, data_temp;
+    mcfly_mod_data_t data_vin, data_throttle, data_stds;
 
     /* Initalize Mcfly using the default-named config file in this directory */
     err = mcfly_init(NULL, &handle);
@@ -43,19 +44,31 @@ int main(void)
     /* Query the OBD module */
     query(handle, MCFLY_MOD_CMD_OBD_SPEED, &data_kph);
     query(handle, MCFLY_MOD_CMD_OBD_RPM, &data_rpm);
+    query(handle, MCFLY_MOD_CMD_OBD_AMBIENT_AIR, &data_temp);
+    query(handle, MCFLY_MOD_CMD_OBD_VIN, &data_vin);
+    query(handle, MCFLY_MOD_CMD_OBD_THROTTLE_POS, &data_throttle);
+    query(handle, MCFLY_MOD_CMD_OBD_STANDARDS, &data_stds);
 
     /* Check the resulting data for speed:
      * Note: We know that the speed is stored in the 'value' and not the
      * 'binary' member of the data object.
      */
-    printf("%.02f, %0.2f, %d\n",
+    data_vin->binary[data_vin.binary_size - 1] = '\0';
+    printf("%.02fkph, %drpm, %02fC, %s, %02f, %d\n",
            data_kph.value,
-           MCFLY_KPH_TO_MPH(data_kph.value),
-           (int)data_rpm.value);
+           (int)data_rpm.value,
+           data_temp.value
+           data_vin.binary,
+           data_throttle.value,
+           data_stds.value);
            
     /* Free the data result */
     mcfly_mod_data_destroy(&data_kph);
     mcfly_mod_data_destroy(&data_rpm);
+    mcfly_mod_data_destroy(&data_temp);
+    mcfly_mod_data_destroy(&data_vin);
+    mcfly_mod_data_destroy(&data_throttle);
+    mcfly_mod_data_destroy(&data_stds);
 
     /* Shutdown Mcfly */
     mcfly_shutdown(handle);
