@@ -53,14 +53,13 @@ int main(void)
      * Note: We know that the speed is stored in the 'value' and not the
      * 'binary' member of the data object.
      */
-    data_vin->binary[data_vin.binary_size - 1] = '\0';
-    printf("%.02fkph, %drpm, %02fC, %s, %02f, %d\n",
+    printf("%.02fkph, %drpm, %02fC, %s, %02f, 0x%x\n",
            data_kph.value,
            (int)data_rpm.value,
-           data_temp.value
+           data_temp.value,
            data_vin.binary,
            data_throttle.value,
-           data_stds.value);
+           (unsigned char)data_stds.value);
            
     /* Free the data result */
     mcfly_mod_data_destroy(&data_kph);
