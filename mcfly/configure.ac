@@ -25,7 +25,13 @@ AC_FUNC_SELECT_ARGTYPES
 AC_CHECK_FUNCS([memset select mkfifo strchr])
 
 # Flags
-CFLAGS="-g3 -Wall"
+CFLAGS="-Wall"
+
+AC_ARG_ENABLE([debug],
+              [AC_HELP_STRING([--enable-debug], [Enable debugging build])],
+              [CFLAGS="$CFLAGS -g3 -DDEBUG"],
+              [CFLAGS="$CFLAGS -O3"])
+
 AC_SUBST(CFLAGS)
 
 # Cholesteral

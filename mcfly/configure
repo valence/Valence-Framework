@@ -1238,6 +1238,11 @@ if test -n "$ac_init_help"; then
 
   cat <<\_ACEOF
 
+Optional Features:
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-debug          Enable debugging build
+
 Some influential environment variables:
   CC          C compiler command
   CFLAGS      C compiler flags
@@ -4341,7 +4346,16 @@ done
 
 
 # Flags
-CFLAGS="-g3 -Wall"
+CFLAGS="-Wall"
+
+# Check whether --enable-debug was given.
+if test "${enable_debug+set}" = set; then
+  enableval=$enable_debug; CFLAGS="$CFLAGS -g3 -DDEBUG"
+else
+  CFLAGS="$CFLAGS -O3"
+fi
+
+
 
 
 # Cholesteral
