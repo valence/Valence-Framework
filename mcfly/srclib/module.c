@@ -19,6 +19,8 @@ mcfly_mod_data_t *mcfly_mod_data_create(size_t size)
     if (!(data = calloc(1, size)))
       return NULL;
 
+    data->binary_size = size;
+
     return data;
 }
 
