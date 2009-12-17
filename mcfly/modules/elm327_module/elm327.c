@@ -153,9 +153,10 @@ int elm327_send_msg(int fd, elm327_msg_t msg)
      */
     elm327_msg_to_ascii(msg, ascii);
     ascii[4] = '\r';
+    ascii[5] = '\0';
 
 #ifdef DEBUG_ANNOY
-    printf("elm327 sending message: %s", ascii); 
+    printf("elm327 sending message: %s\n", ascii); 
 #endif
 
     /* 4 hex digits + carriage return */
