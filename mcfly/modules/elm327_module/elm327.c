@@ -246,16 +246,16 @@ elm327_msg_t *elm327_recv_msgs(int fd, int *n_msgs)
     for (msg_idx=0; msg_idx<n_lines; ++msg_idx)
       elm327_ascii_to_msg(ascii_msgs[msg_idx], msgs[msg_idx]);
 
+#ifdef DEBUG_ANNOY
+    printf("elm327 received %d messages:\n", n_lines);
+    for (msg_idx=0; msg_idx<n_lines; ++msg_idx)
+      printf("\t[%d] %s\n", msg_idx+1, ascii_msgs[msg_idx]);
+#endif
+
     free(ascii_msgs);
     
     if (n_msgs)
       *n_msgs = n_lines;
-
-#ifdef DEBUG_ANNOY
-    printf("elm327 received %d messages:\n", n_lines);
-    for (msg_idx=0; msg_idx<n_lines; ++msg_idx)
-      printf("\t[%d] %s\n", msg_idx+1, msgs[msg_idx]);
-#endif
 
     return msgs;
 }
