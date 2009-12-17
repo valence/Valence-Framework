@@ -1242,6 +1242,7 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-debug          Enable debugging build
+  --enable-debug-annoy    Enable really verbose debugging
 
 Some influential environment variables:
   CC          C compiler command
@@ -4351,6 +4352,14 @@ CFLAGS="-Wall"
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then
   enableval=$enable_debug; CFLAGS="$CFLAGS -g3 -DDEBUG"
+else
+  CFLAGS="$CFLAGS -O3"
+fi
+
+
+# Check whether --enable-debug-annoy was given.
+if test "${enable_debug_annoy+set}" = set; then
+  enableval=$enable_debug_annoy; CFLAGS="$CFLAGS -g3 -DDEBUG -DDEBUG_ANNOY"
 else
   CFLAGS="$CFLAGS -O3"
 fi

@@ -32,6 +32,12 @@ AC_ARG_ENABLE([debug],
               [CFLAGS="$CFLAGS -g3 -DDEBUG"],
               [CFLAGS="$CFLAGS -O3"])
 
+AC_ARG_ENABLE([debug-annoy],
+              [AC_HELP_STRING([--enable-debug-annoy],
+                              [Enable really verbose debugging])],
+              [CFLAGS="$CFLAGS -g3 -DDEBUG -DDEBUG_ANNOY"],
+              [CFLAGS="$CFLAGS -O3"])
+
 AC_SUBST(CFLAGS)
 
 # Cholesteral

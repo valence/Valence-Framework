@@ -9,9 +9,6 @@
 #include "elm327.h"
 
 
-#undef TEST
-
-
 /*
  * Global
  */
@@ -44,10 +41,6 @@ int elm327_init(const char *device_path)
 
     if ((fd = open(device_path, O_RDWR)) == -1)
       return -1;
-
-#ifdef TEST
-    return fd;
-#endif
 
     /* Save original terminal settings (so we can restore at shutdown) */
     if (tcgetattr(fd, &elm327_termios_original) == -1)
@@ -154,15 +147,16 @@ void elm327_ascii_to_msg(const elm327_msg_as_ascii_t ascii, elm327_msg_t msg)
 int elm327_send_msg(int fd, elm327_msg_t msg)
 {
     elm327_msg_as_ascii_t ascii;
-#ifdef TEST
-    return 5;
-#endif
 
     /* Assuming that all messages for OBD-II are 2 bytes or represented by elm
      * as 4 ascii characters
-     * */
+     */
     elm327_msg_to_ascii(msg, ascii);
     ascii[4] = '\r';
+
+#ifdef DEBUG_ANNOY
+    printf("elm327 sending message: %s", ascii); 
+#endif
 
     /* 4 hex digits + carriage return */
     return write(fd, ascii, 5);
@@ -256,6 +250,12 @@ elm327_msg_t *elm327_recv_msgs(int fd, int *n_msgs)
     
     if (n_msgs)
       *n_msgs = n_lines;
+
+#ifdef DEBUG_ANNOY
+    printf("elm327 received %d messages:\n", n_lines);
+    for (msg_idx=0; msg_idx<n_lines; ++msg_idx)
+      printf("\t[%d] %s\n", msg_idx+1, msgs[msg_idx]);
+#endif
 
     return msgs;
 }
