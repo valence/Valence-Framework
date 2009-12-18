@@ -133,7 +133,7 @@ static mcfly_err_t get_rpm(mcfly_mod_data_t *data)
     QUERY_OR_ERR(OBD_MODE_1, 0x0C, &recv_msg, NULL);
 
     /* Convert RPM */
-    data->value = (((*recv_msg)[2] * 256) * (*recv_msg[3])) / 4.0;
+    data->value = (((*recv_msg)[2] * 256) + (*recv_msg[3])) / 4.0;
     elm327_destroy_recv_msgs(recv_msg);
 
     return MCFLY_SUCCESS;
