@@ -195,6 +195,10 @@ elm327_msg_t *elm327_recv_msgs(int fd, int *n_msgs)
           break;
         else if ((prev == '\n') && (c == '\n'))
           break;
+        /* Ignore "UNSUPPORTED, NODATA, and SEARCHING..." */
+        else if ((char_idx == 0) && (c=='U' || c=='N' || c=='S'))
+          break;
+
         buf[char_idx++] = c;
         prev = c;
     }
