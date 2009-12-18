@@ -2,8 +2,7 @@
 #define _MCFLY_MODULES_COMMANDS_H
 
 /* These are commands supported by the base Mcfly system modules */
-typedef enum _mcfly_mod_cmd_t mcfly_mod_cmd_t;
-enum _mcfly_mod_cmd_t
+typedef enum _mcfly_mod_cmd_t
 {
     /* Default */
     MCFLY_MOD_CMD_NONE,
@@ -15,6 +14,6 @@ enum _mcfly_mod_cmd_t
     MCFLY_MOD_CMD_OBD_STANDARDS,
     MCFLY_MOD_CMD_OBD_AMBIENT_AIR,
     MCFLY_MOD_CMD_OBD_VIN,
-};
+} mcfly_mod_cmd_t;
 
 #endif /* _MCFLY_MODULES_COMMANDS_H */

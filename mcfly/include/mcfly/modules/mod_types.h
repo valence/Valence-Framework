@@ -2,12 +2,11 @@
 #define _MCFLY_MODULES_TYPES_H
 
 /* These are the various types of modules for the base Mcfly system */
-typedef enum _mcfly_mod_type_t mcfly_mod_type_t;
-enum _mcfly_mod_type_t
+typedef enum _mcfly_mod_type_t
 {
     MCFLY_MOD_TYPE_DUMMY,
     MCFLY_MOD_TYPE_OBD,
-};
+} mcfly_mod_type_t;
 
 
 /* This is the data structure each module can return data in */

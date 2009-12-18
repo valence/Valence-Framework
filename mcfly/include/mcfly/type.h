@@ -57,13 +57,12 @@ struct _mcfly_list_node_t
  */
 
 /* Type of values that can be stored in a config */
-typedef enum _mcfly_cfg_value_t mcfly_cfg_value_t;
-enum _mcfly_cfg_value_t
+typedef enum _mcfly_cfg_value_t
 {
     MCFLY_CFG_VALUE_INT,
     MCFLY_CFG_VALUE_REAL,
     MCFLY_CFG_VALUE_STRING,
-};
+} mcfly_cfg_value_t;
 
 
 /* Base configuration keys */

@@ -1,5 +1,5 @@
-SUBDIRS = srclib modules bindings tests 
-EXTRA_CLEAN = config.log config.status Makefile
+SUBDIRS = cpp
+EXTRA_CLEAN = Makefile
 
 all: $(SUBDIRS)
 	@for i in $(SUBDIRS); do $(MAKE) -C $$i; done

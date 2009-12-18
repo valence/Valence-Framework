@@ -1,5 +1,4 @@
-SUBDIRS = srclib modules bindings tests 
-EXTRA_CLEAN = config.log config.status Makefile
+SUBDIRS = srclib
 
 all: $(SUBDIRS)
 	@for i in $(SUBDIRS); do $(MAKE) -C $$i; done
@@ -7,9 +6,6 @@ all: $(SUBDIRS)
 clean:
 	@for i in $(SUBDIRS); do $(MAKE) clean -C $$i; done
 
-test: all
-	$(MAKE) test -C tests/
-
 distclean: clean
-	@rm -rfv $(EXTRA_CLEAN)
+	@rm Makefile
 	@for i in $(SUBDIRS); do $(MAKE) distclean -C $$i; done

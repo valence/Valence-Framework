@@ -6,6 +6,7 @@ AC_INIT()
 
 # Checks for programs.
 AC_PROG_CC
+AC_PROG_CXX
 AC_PROG_MAKE_SET
 
 # Checks for header files.
@@ -29,14 +30,15 @@ CFLAGS="-Wall"
 
 AC_ARG_ENABLE([debug],
               [AC_HELP_STRING([--enable-debug], [Enable debugging build])],
-              [CFLAGS="$CFLAGS -g3 -DDEBUG"],
+              [CFLAGS="$CFLAGS -DDEBUG"],
               [CFLAGS="$CFLAGS -O3"])
 
 AC_ARG_ENABLE([debug-annoy],
               [AC_HELP_STRING([--enable-debug-annoy],
                               [Enable really verbose debugging])],
-              [CFLAGS="$CFLAGS -g3 -DDEBUG -DDEBUG_ANNOY"],
+              [CFLAGS="$CFLAGS -DDEBUG -DDEBUG_ANNOY"],
               [CFLAGS="$CFLAGS -O3"])
+
 
 AC_SUBST(CFLAGS)
 
@@ -49,5 +51,8 @@ AC_CONFIG_FILES([Makefile
                  tests/Makefile
                  modules/Makefile
                  modules/dummy_module/Makefile
-                 modules/elm327_module/Makefile])
+                 modules/elm327_module/Makefile
+                 bindings/Makefile
+                 bindings/cpp/Makefile
+                 bindings/cpp/srclib/Makefile])
 AC_OUTPUT

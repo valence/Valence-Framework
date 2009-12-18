@@ -1,0 +1,19 @@
+CC = @CXX@
+CFLAGS = @CFLAGS@
+CLIBS = @CLIBS@
+ADDITIONAL_CFLAGS = -fPIC
+INCLUDE = ../include -I../../../include
+OBJS = mcfly_cpp.oo
+LIBNAME = libmcfly_cpp.so
+EXTRA_CLEAN = ../$(LIBNAME)
+
+all: $(LIBNAME)
+
+$(LIBNAME): $(OBJS)
+	$(CC) -o $@ $(OBJS) -shared $(CLIBS)
+	@mv -v $@ ../
+
+%.oo: %.cc
+	$(CXX) -c $< -o $@ -I$(INCLUDE) $(CFLAGS) $(ADDITIONAL_CFLAGS)
+
+include ../../../make.inc
