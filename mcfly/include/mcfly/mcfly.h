@@ -78,8 +78,7 @@ extern mcfly_err_t mcfly_command(
  * data:  Input data to send, or output data to receive
  *
  * Returns: MCFLY_SUCCESS on success, error otherwise.
- *          If data is to be returned, it is placed
- *          in 'data'
+ *          If data is to be returned, it is placed in 'data'
  */
 extern mcfly_err_t mcfly_command_by_type(
     const mcfly_t     mcfly,

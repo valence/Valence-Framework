@@ -8,9 +8,12 @@ extern "C"
 #include <mcfly/type.h>
 #include <mcfly/modules/mod_commands.h>
 #include <mcfly/modules/mod_types.h>
-}
+};
 
 
+namespace mcfly {
+
+    
 class Mcfly
 {
 public:
@@ -21,7 +24,10 @@ public:
     ~Mcfly();
 
     // Wrap mcfly_command
-    mcfly_err_t command(mcfly_mod_cmd_t cmd, mcfly_mod_data_t *data);
+    mcfly_err_t command(
+        mcfly_mod_t      *mod,
+        mcfly_mod_cmd_t   cmd,
+        mcfly_mod_data_t *data);
 
     // Wrap mcfly_command_by_type
     mcfly_err_t command(
@@ -32,5 +38,8 @@ public:
 private:
     mcfly_t mMcfly;
 };
+
+
+} // End of Mcfly namespace
 
 #endif // _MCFLY_CPP_HH
