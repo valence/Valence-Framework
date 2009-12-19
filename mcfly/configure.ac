@@ -4,10 +4,12 @@
 AC_PREREQ()
 AC_INIT()
 
+
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_MAKE_SET
+
 
 # Checks for header files.
 AC_HEADER_DIRENT
@@ -15,32 +17,38 @@ AC_HEADER_STDC
 AC_HEADER_TIME
 AC_CHECK_HEADERS([stdlib.h stddef.h fcntl.h termios.h])
 
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_TYPE_SIZE_T
 AC_TYPE_SSIZE_T
+
 
 # Checks for library functions.
 AC_FUNC_CLOSEDIR_VOID
 AC_FUNC_SELECT_ARGTYPES
 AC_CHECK_FUNCS([memset select mkfifo strchr])
 
+
 # Flags
 CFLAGS="-Wall"
 
 AC_ARG_ENABLE([debug],
               [AC_HELP_STRING([--enable-debug], [Enable debugging build])],
-              [CFLAGS="$CFLAGS -DDEBUG"],
-              [CFLAGS="$CFLAGS -O3"])
+              [CFLAGS="$CFLAGS -DDEBUG"])
 
 AC_ARG_ENABLE([debug-annoy],
               [AC_HELP_STRING([--enable-debug-annoy],
                               [Enable really verbose debugging])],
-              [CFLAGS="$CFLAGS -DDEBUG -DDEBUG_ANNOY"],
-              [CFLAGS="$CFLAGS -O3"])
+              [CFLAGS="$CFLAGS -DDEBUG -DDEBUG_ANNOY"])
 
+# If we have not enabled debug set common flags
+if test "${enable_debug+set}" != set && test "${enable_debug_annoy+set}" != set; then
+    CFLAGS="$CFLAGS -O3"
+fi
 
 AC_SUBST(CFLAGS)
+
 
 # Cholesteral
 CLIBS="-ldl -lpthread"
