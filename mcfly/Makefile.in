@@ -9,6 +9,7 @@ clean:
 
 test: all
 	$(MAKE) test -C tests/
+	$(MAKE) test -C bindings/
 
 distclean: clean
 	@rm -rfv $(EXTRA_CLEAN)

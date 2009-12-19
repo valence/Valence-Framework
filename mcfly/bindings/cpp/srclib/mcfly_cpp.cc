@@ -4,7 +4,7 @@ using namespace mcfly;
 
 Mcfly::Mcfly(const char *config)
 {
-    mcfly_init(config, &mMcfly);
+    mError = mcfly_init(config, &mMcfly);
 }
 
 
@@ -19,7 +19,8 @@ mcfly_err_t Mcfly::command(
     mcfly_mod_cmd_t   cmd,
     mcfly_mod_data_t *data)
 {
-    return mcfly_command(mod, cmd, data);
+    mError = mcfly_command(mod, cmd, data);
+    return mError;
 }
 
 
@@ -28,5 +29,6 @@ mcfly_err_t Mcfly::command(
     mcfly_mod_cmd_t   cmd,
     mcfly_mod_data_t *data)
 {
-    return mcfly_command_by_type(mMcfly, type, cmd, data);
+    mError = mcfly_command_by_type(mMcfly, type, cmd, data);
+    return mError;
 }

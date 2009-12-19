@@ -4973,7 +4973,7 @@ fi
 CLIBS="-ldl -lpthread"
 
 
-ac_config_files="$ac_config_files Makefile srclib/Makefile tests/Makefile modules/Makefile modules/dummy_module/Makefile modules/elm327_module/Makefile bindings/Makefile bindings/cpp/Makefile bindings/cpp/srclib/Makefile"
+ac_config_files="$ac_config_files Makefile srclib/Makefile tests/Makefile modules/Makefile modules/dummy_module/Makefile modules/elm327_module/Makefile bindings/Makefile bindings/cpp/Makefile bindings/cpp/srclib/Makefile bindings/cpp/tests/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -5592,6 +5592,7 @@ do
     "bindings/Makefile") CONFIG_FILES="$CONFIG_FILES bindings/Makefile" ;;
     "bindings/cpp/Makefile") CONFIG_FILES="$CONFIG_FILES bindings/cpp/Makefile" ;;
     "bindings/cpp/srclib/Makefile") CONFIG_FILES="$CONFIG_FILES bindings/cpp/srclib/Makefile" ;;
+    "bindings/cpp/tests/Makefile") CONFIG_FILES="$CONFIG_FILES bindings/cpp/tests/Makefile" ;;
 
   *) { { $as_echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 $as_echo "$as_me: error: invalid argument: $ac_config_target" >&2;}

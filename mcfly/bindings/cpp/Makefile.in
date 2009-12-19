@@ -1,10 +1,13 @@
-SUBDIRS = srclib
+SUBDIRS = srclib tests
 
 all: $(SUBDIRS)
 	@for i in $(SUBDIRS); do $(MAKE) -C $$i; done
 
 clean:
 	@for i in $(SUBDIRS); do $(MAKE) clean -C $$i; done
+
+test: all
+	$(MAKE) test -C tests/
 
 distclean: clean
 	@rm Makefile

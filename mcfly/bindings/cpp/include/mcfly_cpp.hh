@@ -23,6 +23,11 @@ public:
     // Wrap mcfly_shutdown
     ~Mcfly();
 
+    // Did we get an error
+    mcfly_err_t getError() const { return mError; }
+    int getErrorValue () const { return MCFLY_ERR_VAL(mError); }
+    
+
     // Wrap mcfly_command
     mcfly_err_t command(
         mcfly_mod_t      *mod,
@@ -36,7 +41,8 @@ public:
         mcfly_mod_data_t *data);
 
 private:
-    mcfly_t mMcfly;
+    mcfly_t     mMcfly; // Handle
+    mcfly_err_t mError; // Last error
 };
 
 

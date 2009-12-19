@@ -10,7 +10,7 @@ EXTRA_CLEAN = ../$(LIBNAME)
 all: $(LIBNAME)
 
 $(LIBNAME): $(OBJS)
-	$(CC) -o $@ $(OBJS) -shared $(CLIBS)
+	$(CC) -o $@ $(OBJS) -shared $(CLIBS) -L../../../srclib/ -lmcfly -Wl,-rpath=../../../srclib/
 	@mv -v $@ ../
 
 %.oo: %.cc
