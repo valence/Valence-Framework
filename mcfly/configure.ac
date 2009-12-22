@@ -62,6 +62,5 @@ AC_CONFIG_FILES([Makefile
                  modules/elm327_module/Makefile
                  bindings/Makefile
                  bindings/cpp/Makefile
-                 bindings/cpp/srclib/Makefile
-                 bindings/cpp/tests/Makefile])
+                 bindings/cpp/srclib/Makefile])
 AC_OUTPUT
