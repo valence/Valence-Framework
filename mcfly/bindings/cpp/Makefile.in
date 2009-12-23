@@ -1,4 +1,4 @@
-SUBDIRS = srclib
+SUBDIRS = srclib tests
 
 all: $(SUBDIRS)
 	@for i in $(SUBDIRS); do $(MAKE) -C $$i; done

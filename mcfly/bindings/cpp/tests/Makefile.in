@@ -1,0 +1,20 @@
+CC = @CXX@
+CFLAGS = @CFLAGS@
+CLIBS = @CLIBS@
+INCLUDE = ../include -I../../../include
+OBJS = main.oo
+APP = testapp
+EXTRA_CLEAN = $(APP)
+
+all: $(APP)
+
+$(APP): $(OBJS)
+	$(CXX) -o $@ $(OBJS) -L../ -lmcfly_cpp $(CLIBS)
+
+%.oo: %.cc
+	$(CXX) -c $< -o $@ -I$(INCLUDE) $(CFLAGS) $(ADDITIONAL_CFLAGS)
+
+test:
+	LD_LIBRARY_PATH=../ ./testapp
+
+include ../../../make.inc
