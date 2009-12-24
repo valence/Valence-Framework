@@ -48,7 +48,11 @@ mcfly_err_t mcfly_init(const char *config, mcfly_t *mcfly)
 void mcfly_shutdown(mcfly_t mcfly)
 {
     mcfly_cfg_shutdown(mcfly->configs);
+    mcfly->configs = NULL;
+
     mcfly_mod_shutdown(mcfly);
+    mcfly->modules = NULL;
+
     free(mcfly);
     mcfly = NULL;
 }

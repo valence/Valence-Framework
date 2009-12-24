@@ -4,7 +4,11 @@ using namespace mcfly;
 
 Mcfly::Mcfly(const char *config)
 {
-    mError = mcfly_init(config, &mMcfly);
+    if ((mError = mcfly_init(config, &mMcfly)) != MCFLY_SUCCESS)
+    {
+        mcfly_shutdown(mMcfly);
+        mMcfly = NULL;
+    }
 }
 
 
