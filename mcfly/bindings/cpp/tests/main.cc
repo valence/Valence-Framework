@@ -18,5 +18,8 @@ int main(void)
         return marty->getErrorValue();
     }
 
+    // Free/shutdown Mcfly
+    delete marty;
+
     return 0;
 }
