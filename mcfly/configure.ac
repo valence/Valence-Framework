@@ -45,6 +45,8 @@ AC_ARG_ENABLE([debug-annoy],
 # If we have not enabled debug set common flags
 if test "${enable_debug+set}" != set && test "${enable_debug_annoy+set}" != set; then
     CFLAGS="$CFLAGS -O3"
+else
+    CFLAGS="$CFLAGS -g3"
 fi
 
 AC_SUBST(CFLAGS)
