@@ -9,6 +9,7 @@ extern "C"
 #include <mcfly/modules/mod_commands.h>
 #include <mcfly/modules/mod_types.h>
 };
+#include <ostream>
 
 
 namespace mcfly {
@@ -26,7 +27,6 @@ public:
     // Did we get an error
     mcfly_err_t getError() const { return mError; }
     int getErrorValue () const { return MCFLY_ERR_VAL(mError); }
-    
 
     // Wrap mcfly_command
     mcfly_err_t command(
@@ -45,6 +45,24 @@ private:
     mcfly_err_t mError; // Last error
 };
 
+
+// Optional, but possibly useful exception handling
+class McflyException
+{
+public:
+    McflyException(mcfly_err_t err) : mError(err) {;}
+
+    mcfly_err_t getError() const { return mError; }
+    int  getErrorVal() const { return MCFLY_ERR_VAL(mError); }
+    const char *getErrorStr() const { return MCFLY_ERR_STR(mError); }
+
+private:
+    mcfly_err_t mError;
+};
+
+
+// For exception display (outside namespace)
+std::ostream &operator<<(std::ostream &os, const McflyException &ex);
 
 } // End of Mcfly namespace
 

@@ -1,4 +1,5 @@
 #include <mcfly_cpp.hh>
+#include <ostream>
 using namespace mcfly;
 
 
@@ -8,6 +9,7 @@ Mcfly::Mcfly(const char *config)
     {
         mcfly_shutdown(mMcfly);
         mMcfly = NULL;
+        throw (McflyException(mError));
     }
 }
 
@@ -35,4 +37,11 @@ mcfly_err_t Mcfly::command(
 {
     mError = mcfly_command_by_type(mMcfly, type, cmd, data);
     return mError;
+}
+
+
+std::ostream &mcfly::operator<<(std::ostream &os, const McflyException &ex)
+{
+    return os << "[Mcfly Error: " << ex.getErrorVal() << "] "
+              << ex.getErrorStr() << std::endl;
 }
