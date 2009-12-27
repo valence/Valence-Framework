@@ -36,6 +36,9 @@ mcfly_err_t Mcfly::command(
     mcfly_mod_data_t *data)
 {
     mError = mcfly_command_by_type(mMcfly, type, cmd, data);
+    if (mError != MCFLY_SUCCESS)
+      throw (McflyException(mError));
+
     return mError;
 }
 
@@ -46,6 +49,9 @@ mcfly_err_t Mcfly::command(
     mcfly_mod_data_t *data)
 {
     mError = mcfly_command_by_name(mMcfly, mod_name, cmd, data);
+    if (mError != MCFLY_SUCCESS)
+      throw (McflyException(mError));
+
     return mError;
 }
 
