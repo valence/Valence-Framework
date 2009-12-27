@@ -60,9 +60,9 @@ void mcfly_shutdown(mcfly_t mcfly)
 
 /* Wrapper */
 mcfly_err_t mcfly_command(
-    mcfly_mod_t      *mod, 
-    mcfly_mod_cmd_t   cmd,
-    mcfly_mod_data_t *data)
+    const mcfly_mod_t *mod, 
+    mcfly_mod_cmd_t    cmd,
+    mcfly_mod_data_t  *data)
 {
     return mcfly_mod_query(mod, cmd, data);
 }
@@ -70,10 +70,21 @@ mcfly_err_t mcfly_command(
 
 /* Wrapper */
 mcfly_err_t mcfly_command_by_type(
-    mcfly_t           mcfly,
+    const mcfly_t           mcfly,
     mcfly_mod_type_t  type, 
     mcfly_mod_cmd_t   cmd,
     mcfly_mod_data_t *data)
 {
     return mcfly_mod_query_by_type(mcfly, type, cmd, data);
+}
+
+
+/* Wrapper */
+mcfly_err_t mcfly_command_by_name(
+    const mcfly_t     mcfly,
+    const char       *mod_name, 
+    mcfly_mod_cmd_t   cmd,
+    mcfly_mod_data_t *data)
+{
+    return mcfly_mod_query_by_name(mcfly, mod_name, cmd, data);
 }

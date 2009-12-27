@@ -18,12 +18,23 @@ int main(void)
         return ex.getErrorVal();
     }
 
-    // Test: Command (This example for "command()' is not using exceptions)
+    // Command by type (This example for "command()' is not using exceptions)
     mcfly_mod_data_t data;
     if (marty->command(MCFLY_MOD_TYPE_OBD, 
             MCFLY_MOD_CMD_OBD_SPEED, &data) != MCFLY_SUCCESS)
     {
         return marty->getErrorValue();
+    }
+    
+    // Command by name
+    try
+    {
+        marty->command("elm327_module", MCFLY_MOD_CMD_OBD_SPEED, &data);
+    }
+    catch (McflyException &ex)
+    {
+        std::cerr << ex << std::endl;
+        return ex.getErrorVal();
     }
 
     // Free/shutdown Mcfly

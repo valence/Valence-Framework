@@ -39,6 +39,12 @@ public:
         mcfly_mod_type_t  type,
         mcfly_mod_cmd_t   cmd,
         mcfly_mod_data_t *data);
+    
+    // Wrap mcfly_command_by_name
+    mcfly_err_t command(
+        const char       *mod_name,
+        mcfly_mod_cmd_t   cmd,
+        mcfly_mod_data_t *data);
 
 private:
     mcfly_t     mMcfly; // Handle
@@ -65,5 +71,6 @@ private:
 std::ostream &operator<<(std::ostream &os, const McflyException &ex);
 
 } // End of Mcfly namespace
+
 
 #endif // _MCFLY_CPP_HH

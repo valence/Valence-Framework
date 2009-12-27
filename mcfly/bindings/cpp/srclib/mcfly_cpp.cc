@@ -40,6 +40,18 @@ mcfly_err_t Mcfly::command(
 }
 
 
+mcfly_err_t Mcfly::command(
+    const char       *mod_name,
+    mcfly_mod_cmd_t   cmd,
+    mcfly_mod_data_t *data)
+{
+    mError = mcfly_command_by_name(mMcfly, mod_name, cmd, data);
+    return mError;
+}
+
+
+
+
 std::ostream &mcfly::operator<<(std::ostream &os, const McflyException &ex)
 {
     return os << "[Mcfly Error: " << ex.getErrorVal() << "] "

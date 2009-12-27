@@ -48,7 +48,7 @@ extern void mcfly_shutdown(mcfly_t mcfly);
 
 /* mcfly_command
  *
- * Issue a command to a Mcfly device
+ * Issue a command to a Mcfly device.
  *
  * mod:  Module/Device to query
  * cmd:  Command for device
@@ -59,7 +59,7 @@ extern void mcfly_shutdown(mcfly_t mcfly);
  *          in 'data'
  */
 extern mcfly_err_t mcfly_command(
-    mcfly_mod_t       *mod,
+    const mcfly_mod_t *mod,
     mcfly_mod_cmd_t    cmd,
     mcfly_mod_data_t  *data);
 
@@ -83,6 +83,26 @@ extern mcfly_err_t mcfly_command(
 extern mcfly_err_t mcfly_command_by_type(
     const mcfly_t     mcfly,
     mcfly_mod_type_t  type,
+    mcfly_mod_cmd_t   cmd,
+    mcfly_mod_data_t *data);
+
+
+/* mcfly_command_by_name
+ *
+ * Issue a command to a Mcfly device specified by that device (module's) name.
+ *
+ * mcfly:    Mcfly handle
+ * mod_name: Module name to query
+ * cmd:      Command for device
+ * data:     Input data to send, or output data to receive
+ *
+ * Returns: MCFLY_SUCCESS on success, error otherwise.
+ *          If data is to be returned, it is placed
+ *          in 'data'
+ */
+extern mcfly_err_t mcfly_command_by_name(
+    const mcfly_t     mcfly,
+    const char       *mod_name,
     mcfly_mod_cmd_t   cmd,
     mcfly_mod_data_t *data);
 

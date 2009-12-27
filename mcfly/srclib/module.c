@@ -143,9 +143,9 @@ mcfly_mod_t *mcfly_mod_find(const mcfly_t mcfly, const char *module_name)
 
 
 mcfly_err_t mcfly_mod_query(
-    mcfly_mod_t      *mod, 
-    mcfly_mod_cmd_t   cmd,
-    mcfly_mod_data_t *data)
+    const mcfly_mod_t *mod, 
+    mcfly_mod_cmd_t    cmd,
+    mcfly_mod_data_t  *data)
 {
     return mod->query(cmd, data);
 }
@@ -173,6 +173,31 @@ mcfly_err_t mcfly_mod_query_by_type(
       return MCFLY_ERR_NOMOD;
 
     /* Ask Jeeves */
+    return mcfly_mod_query(mod, cmd, data);
+}
+
+
+mcfly_err_t mcfly_mod_query_by_name(
+    const mcfly_t     mcfly,
+    const char       *mod_name,
+    mcfly_mod_cmd_t   cmd,
+    mcfly_mod_data_t *data)
+{
+    mcfly_mod_t       *mod;
+    mcfly_list_node_t *itr;
+
+    /* Locate the module */
+    mod = NULL;
+    for (itr=&mcfly->modules->list; itr; itr=itr->next)
+    {
+        mod = mcfly_util_list_get(itr, mcfly_mod_t, list);
+        if (strncmp(mod->name, mod_name, MCFLY_MAX_STRING_LEN) == 0)
+          break;
+    }
+
+    if (!mod)
+      return MCFLY_ERR_NOMOD;
+
     return mcfly_mod_query(mod, cmd, data);
 }
 
