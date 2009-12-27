@@ -8,8 +8,7 @@ clean:
 	@for i in $(SUBDIRS); do $(MAKE) clean -C $$i; done
 
 test: all
-	$(MAKE) test -C tests/
-	$(MAKE) test -C bindings/
+	$(MAKE) test -C bindings/ || $(MAKE) test -C tests/
 
 distclean: clean
 	@rm -rfv $(EXTRA_CLEAN)

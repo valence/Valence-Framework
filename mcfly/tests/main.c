@@ -147,6 +147,49 @@ static mcfly_err_t test_query_obd(void)
 }
 
 
+static mcfly_err_t test_cmd(void)
+{
+    mcfly_mod_t       *mod;
+    mcfly_mod_data_t   data;
+    mcfly_list_node_t *itr;
+
+    /* Find the dummy module manually */
+    for (itr=&handle->modules->list; itr; itr=itr->next)
+    {
+        mod = mcfly_util_list_get(itr, mcfly_mod_t, list);
+        if (strncmp(mod->name, "dummy_module", MCFLY_MAX_STRING_LEN) == 0)
+          break;
+    }
+
+    if (!itr)
+      return MCFLY_ERR_NOMOD;
+
+    return mcfly_command(mod, MCFLY_MOD_CMD_DUMMY_TEST, &data);
+}
+
+
+static mcfly_err_t test_cmd_type(void)
+{
+    mcfly_mod_data_t data;
+
+    return mcfly_command_by_type(handle,
+                                 MCFLY_MOD_TYPE_DUMMY,
+                                 MCFLY_MOD_CMD_DUMMY_TEST,
+                                 &data);
+}
+
+
+static mcfly_err_t test_cmd_name(void)
+{
+    mcfly_mod_data_t data;
+
+    return mcfly_command_by_name(handle,
+                                 "dummy_module",
+                                 MCFLY_MOD_CMD_DUMMY_TEST,
+                                 &data);
+}
+
+
 /* Test Cases */
 typedef enum 
 {
@@ -155,6 +198,9 @@ typedef enum
     TEST_INIT,
     TEST_REG_RECV,
     TEST_QUERY_OBD,
+    TEST_CMD,
+    TEST_CMD_TYPE,
+    TEST_CMD_NAME,
 } test_id_t;
 
 
@@ -170,7 +216,10 @@ struct
     {"List Remove", TEST_LIST_RM, 0, test_list_rm},
     {"Initialization", TEST_INIT, 0, test_init},
     {"Register Receive", TEST_REG_RECV, 0, test_reg_recv},
-    {"Query OBD", TEST_QUERY_OBD, 0, test_query_obd}
+    {"Query OBD", TEST_QUERY_OBD, 0, test_query_obd},
+    {"Command", TEST_CMD, 0, test_cmd},
+    {"Command by Type", TEST_CMD_TYPE, 0, test_cmd_type},
+    {"Command by Name", TEST_CMD_NAME, 0, test_cmd_name},
 };
 
 

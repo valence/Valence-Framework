@@ -7,6 +7,9 @@ typedef enum _mcfly_mod_cmd_t
     /* Default */
     MCFLY_MOD_CMD_NONE,
 
+    /* Testing */
+    MCFLY_MOD_CMD_DUMMY_TEST,
+
     /* OBD Commands */
     MCFLY_MOD_CMD_OBD_SPEED,
     MCFLY_MOD_CMD_OBD_RPM,

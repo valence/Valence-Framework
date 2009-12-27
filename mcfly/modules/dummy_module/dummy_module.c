@@ -123,6 +123,12 @@ static mcfly_err_t dummy_init(const mcfly_t mcfly, mcfly_mod_t *me)
 }
 
 
+static mcfly_err_t dummy_query(mcfly_mod_cmd_t cmd, mcfly_mod_data_t *data)
+{
+    return MCFLY_SUCCESS;
+}
+
+
 mcfly_mod_t MCFLY_MODULE_STRUCT_SYMBOL =
 {
     .name = "dummy_module",
@@ -131,6 +137,6 @@ mcfly_mod_t MCFLY_MODULE_STRUCT_SYMBOL =
     .configs = NULL,
     .init = dummy_init,
     .shutdown = dummy_shutdown,
-    .query = NULL,
+    .query = dummy_query,
     .recieve_callback = NULL,
 };
