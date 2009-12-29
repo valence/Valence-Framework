@@ -77,7 +77,7 @@ int elm327_init(const char *device_path)
       return -1;
 
     /* What the toilet says... */
-    tcflush(fd, TCIOFLUSH);
+    elm327_flush(fd);
 
     return fd;
 }

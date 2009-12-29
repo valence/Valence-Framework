@@ -108,4 +108,11 @@ extern int elm327_send_msg(int fd, elm327_msg_t msg);
 extern elm327_msg_t *elm327_recv_msgs(int fd, int *n_msgs);
 extern void elm327_destroy_recv_msgs(elm327_msg_t *msgs);
 
+
+/* Flush both input and output buffers to/from ELM327
+ * _fd: File descriptor to flush
+ */
+#define elm327_flush(_fd) tcflush(_fd, TCIOFLUSH)
+
+
 #endif /* _ELM327_H */
