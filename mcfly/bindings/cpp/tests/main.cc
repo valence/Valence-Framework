@@ -20,8 +20,8 @@ int main(void)
 
     // Command by type (This example for "command()' is not using exceptions)
     mcfly_mod_data_t data;
-    if (marty->command(MCFLY_MOD_TYPE_OBD, 
-            MCFLY_MOD_CMD_OBD_SPEED, &data) != MCFLY_SUCCESS)
+    if (marty->command(MCFLY_MOD_TYPE_DUMMY, 
+            MCFLY_MOD_CMD_DUMMY_TEST, &data) != MCFLY_SUCCESS)
     {
         return marty->getErrorValue();
     }
@@ -29,7 +29,7 @@ int main(void)
     // Command by name
     try
     {
-        marty->command("elm327_module", MCFLY_MOD_CMD_OBD_SPEED, &data);
+        marty->command("dummy_module", MCFLY_MOD_CMD_DUMMY_TEST, &data);
     }
     catch (McflyException &ex)
     {
