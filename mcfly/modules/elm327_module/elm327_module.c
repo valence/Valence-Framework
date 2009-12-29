@@ -96,6 +96,9 @@ static mcfly_err_t query_elm(
     if ((*msgs = elm327_recv_msgs(elm327_mod_fd, n_msgs)) == NULL)
       return MCFLY_ERR_MODRECV;
 
+    /* Flush */
+    elm327_flush(elm327_mod_fd);
+
     return MCFLY_SUCCESS;
 }
 
