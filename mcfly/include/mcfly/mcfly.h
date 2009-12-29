@@ -23,14 +23,13 @@
 #define MCFLY_KPH_TO_MPH(_kph) (_kph * 0.621371192)
 
 
-
 /* mcfly_init
  *
  * Initialize the Mcfly library.
  *
- * config:  Path to a Mcfly configuration file
- * mcfly:   Pointer to a non-allocated handle, this routine
- *          does all of the allocation necessary
+ * config: Path to a Mcfly configuration file
+ * mcfly:  Pointer to a non-allocated handle, this routine
+ *         does all of the allocation necessary
  *
  * Returns: MCFLY_SUCCESS and a mcfly handle upon success, NULL otherwise.
  */
@@ -41,7 +40,9 @@ extern mcfly_err_t mcfly_init(
 
 /* mcfly_shutdown
  *
- * Shutdown and release memory of the mcfly instance
+ * Shutdown and release memory of the mcfly instance.
+ *
+ * mcfly: Mcfly handle
  */
 extern void mcfly_shutdown(mcfly_t mcfly);
 
