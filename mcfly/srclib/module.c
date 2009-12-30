@@ -165,7 +165,7 @@ mcfly_err_t mcfly_mod_query_by_type(
     for (itr=&mcfly->modules->list; itr; itr=itr->next)
     {
         mod = mcfly_util_list_get(itr, mcfly_mod_t, list);
-        if (mod->type == type)
+        if (mod && (mod->type == type))
           break;
     }
 
