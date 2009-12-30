@@ -127,7 +127,7 @@ void elm327_msg_to_ascii(const elm327_msg_t msg, elm327_msg_as_ascii_t ascii)
 
 void elm327_ascii_to_msg(const elm327_msg_as_ascii_t ascii, elm327_msg_t msg)
 {
-    int  i, offset;
+    int           i, offset;
     unsigned char low, high;
     
     memset(msg, 0, sizeof(elm327_msg_t));
@@ -164,7 +164,7 @@ int elm327_send_msg(int fd, elm327_msg_t msg)
 }
 
 
-elm327_msg_t *elm327_recv_msgs(int fd, int *n_msgs)
+elm327_msg_t *elm327_recv_msgs(int fd, int *n_msgs, int ascii)
 {
     int                    msg_idx, char_idx, i, n_lines;
     char                   c, prev, *st, *look, buf[256] = {0};
@@ -248,8 +248,12 @@ elm327_msg_t *elm327_recv_msgs(int fd, int *n_msgs)
         return NULL;
     }
 
-    for (msg_idx=0; msg_idx<n_lines; ++msg_idx)
-      elm327_ascii_to_msg(ascii_msgs[msg_idx], msgs[msg_idx]);
+    /* If ascii is requested copy em to msgs */
+    if (ascii)
+      memcpy(msgs, ascii_msgs, n_lines * sizeof(elm327_msg_t));
+    else
+      for (msg_idx=0; msg_idx<n_lines; ++msg_idx)
+        elm327_ascii_to_msg(ascii_msgs[msg_idx], msgs[msg_idx]);
 
 #ifdef DEBUG_ANNOY
     printf("elm327 received %d messages:\n", n_lines);

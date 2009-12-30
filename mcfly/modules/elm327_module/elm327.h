@@ -104,8 +104,11 @@ extern int elm327_send_msg(int fd, elm327_msg_t msg);
 /* Receive the OBD-II messages (headers are removed), and just the ascii
  * version of the data, returned from ELM is provided.  The message(s) returned
  * are the actual hexadecimal values and not ascii.
+ *
+ * If 'ascii' is '1' then the the message is never converted to a binary
+ * format.
  */
-extern elm327_msg_t *elm327_recv_msgs(int fd, int *n_msgs);
+extern elm327_msg_t *elm327_recv_msgs(int fd, int *n_msgs, int ascii);
 extern void elm327_destroy_recv_msgs(elm327_msg_t *msgs);
 
 
