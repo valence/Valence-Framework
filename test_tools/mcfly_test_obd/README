@@ -1,4 +1,4 @@
-McFly Example:  mcfly_test_speed
+McFly Example:  mcfly_test_obd
 --------------------------------
 The example here is a brief usage of the McFly API to query for speed using an
 ELM327 device.
@@ -13,7 +13,7 @@ are, which is what the '-L' argument is for.  Also, you must specify the
 library name, when using the libmcfly library.  Therefore also add the
 '-lmcfly' to you compilation arguments. 
 
-                 'gcc -o mcfly_test_speed mcfly_test_speed.c        \
+                 'gcc -o mcfly_test_obd mcfly_test_obd.c            \
                        -Ipath_to_directory_conaining_mcfly_includes \
                        -Lpath_to_directory_containing_libmcfly      \
                        -lmcfly

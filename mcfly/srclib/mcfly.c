@@ -70,7 +70,7 @@ mcfly_err_t mcfly_command(
 
 /* Wrapper */
 mcfly_err_t mcfly_command_by_type(
-    const mcfly_t           mcfly,
+    const mcfly_t     mcfly,
     mcfly_mod_type_t  type, 
     mcfly_mod_cmd_t   cmd,
     mcfly_mod_data_t *data)

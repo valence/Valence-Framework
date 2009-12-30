@@ -1,11 +1,11 @@
 CC = gcc
-APP = mcfly_test_speed
+APP = mcfly_test_obd
 CFLAGS = -g3 -Wall
 INCLUDE = -I../../mcfly/include/
 LIBS = -lmcfly
 LIBPATH = ../../mcfly/srclib
 
-all: $(APP) test
+all: $(APP)
 
 $(APP):
 	$(CC) -o $@ mcfly_test_obd.c $(INCLUDE) $(CFLAGS) -L$(LIBPATH) $(LIBS)
