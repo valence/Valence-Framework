@@ -9,6 +9,10 @@
 #include <mcfly/modules/mod_types.h>
 #include "elm327.h"
 
+#ifdef DEBUG_ANNOY
+#include <stdio.h>
+#endif
+
 
 /* elm327_module
  *
@@ -16,6 +20,7 @@
  * allowing McFly to communicate via OBD-II to the automobile.
  * The ELM 327 is manufactured by ELM Electronics:
  * <http://www.elmelectronics.com>
+ * <http://www.elmelectronics.com/DSheets/ELM327DS.pdf>
  */
 
 
@@ -187,7 +192,7 @@ static mcfly_err_t get_ambient_air(mcfly_mod_data_t *data)
 
 static mcfly_err_t get_vin(mcfly_mod_data_t *data)
 {
-    int           i, j, n_msgs;
+    int           n_msgs;
     mcfly_err_t   err;
     elm327_msg_t *recv_msgs = NULL;
 
@@ -204,16 +209,41 @@ static mcfly_err_t get_vin(mcfly_mod_data_t *data)
         return err;
     }
 
-    for (i=0; i<5; ++i)
-      for (j=3; j<6; ++j)
-        data->binary[(j*5) + (i-3)] = recv_msgs[i][j];
+    /* CAN format is default for ELM327 pdf (pg 37)
+     * So we skip the first returned result which is the number of bytes.
+     * Then we keep reading till we hit ':' and then remove the previous number.
+     * So we remove 1: and the rest is data.
+     */
+
+    /* TODO: Skip the first 3 bytes
+    data_idx = 0;
+    msg_idx = 3;
+    for (i=2; i<5; ++i)
+    {
+        while (data_idx < (5*5))
+        {
+            if ((c = recv_msg[i][msg_idx]) == ':')
+              --data_idx;
+            else if (c == 0x0)
+              break;
+            else
+            {
+                data->binary[data_idx] = c;
+                ++data_idx;
+            }
+        }
+        msg_idx = 0;
+    }
+    */
+      
 
 #ifdef DEBUG_ANNOY
-    printf("[elm327_module] VIN: ");
-    for (i=0; i<5; ++i)
     {
-        for (j=3; j<6; ++j)
-          printf("%c(0x%02x) ", recv_msgs[i][j], recv_msgs[i][j]);
+        int _i, _j;
+        printf("[elm327_module] VIN: ");
+        for (_i=0; _i<5; ++_i)
+          for (_j=3; _j<6; ++_j)
+            printf("%c(0x%02x) ", recv_msgs[_i][_j], recv_msgs[_i][_j]);
         printf("\n");
     }
 #endif
