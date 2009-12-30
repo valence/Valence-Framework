@@ -206,7 +206,17 @@ static mcfly_err_t get_vin(mcfly_mod_data_t *data)
 
     for (i=0; i<5; ++i)
       for (j=3; j<6; ++j)
-        data->binary[(j*5) + (i-3)] = recv_msgs[j][i];
+        data->binary[(j*5) + (i-3)] = recv_msgs[i][j];
+
+#ifdef DEBUG_ANNOY
+    printf("[elm327_module] VIN: ");
+    for (i=0; i<5; ++i)
+    {
+        for (j=3; j<6; ++j)
+          printf("%c(0x%02x) ", recv_msgs[i][j], recv_msgs[i][j]);
+        printf("\n");
+    }
+#endif
     
     /* VIN bytes 3,4,5,6 (byte 2 is line order) */
     elm327_destroy_recv_msgs(recv_msgs);
