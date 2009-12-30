@@ -8,7 +8,7 @@ LIBPATH = ../../mcfly/srclib
 all: $(APP) test
 
 $(APP):
-	$(CC) -o $@ mcfly_test_speed.c $(INCLUDE) $(CFLAGS) -L$(LIBPATH) $(LIBS)
+	$(CC) -o $@ mcfly_test_obd.c $(INCLUDE) $(CFLAGS) -L$(LIBPATH) $(LIBS)
 
 test: $(APP)
 	LD_LIBRARY_PATH=$(LIBPATH) ./$(APP)
