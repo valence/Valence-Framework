@@ -197,42 +197,39 @@ static mcfly_err_t get_vin(mcfly_mod_data_t *data)
     int           i, n_msgs, msg_idx, data_idx;
     char          c, high, low;
     mcfly_err_t   err;
-    //elm327_msg_t *recv_msgs = NULL;
+    elm327_msg_t *recv_msgs = NULL;
 
-    // QUERY_OR_ERR(OBD_MODE_9, 0x02, &recv_msgs, &n_msgs, 1);
+    QUERY_OR_ERR(OBD_MODE_9, 0x02, &recv_msgs, &n_msgs, 1);
 
-    /* Need 5 rows or messages
-    if (n_msgs < 5)
+    /* Expect at least 4 rows or messages (CAN format from ELM327) */
+    if (n_msgs < 4)
       return MCFLY_ERR_NOCMD;
-    */
 
     /* Five rows of vals with at least 16 chars per row (256 should be ok) */
-    /*if ((err = mcfly_mod_data_initialize(data, 256)) != MCFLY_SUCCESS)
+    if ((err = mcfly_mod_data_initialize(data, 256)) != MCFLY_SUCCESS)
     {
         elm327_destroy_recv_msgs(recv_msgs);
         return err;
-    }*/
+    }
 
     /* CAN format is default for ELM327 pdf (pg 37)
+     * Which looks something like:
+     * Row 1: <Number of Bytes>
+     * Row 2: 0:4209XXXXXXXX
+     * Row 3: 1:XXXXXXXXXXXXXX
+     * Row 4: 2:XXXXXXXXXXXXXX
+     *
      * So we skip the first returned result which is the number of bytes.
      * Then we keep reading till we hit ':' and then remove the previous number.
      * So we remove 1: and the rest is data.
      */
     data_idx = 0;
 
-    /* Skip the first 8 chars (which is 0:490201) */
+    /* Skip the first 8 chars (which are 0:490201) */
     msg_idx = 8;
 
-    char recv_msgs[5][32];
-    memset(recv_msgs, 0, 5*32);
-    data->binary = calloc(1, 256);
-    strcpy(recv_msgs[0], "014");
-    strcpy(recv_msgs[1], "0:4902014A4D312");
-    strcpy(recv_msgs[2], "1:424C31483531412:1234");
-    strcpy(recv_msgs[3], "2:31313830383832");
-
     /* Start at second row skipping "number of bytes" */
-    for (i=1; i<5; ++i)
+    for (i=1; i<n_msgs; ++i)
     {
         while (data_idx < 256)
         {
@@ -243,7 +240,7 @@ static mcfly_err_t get_vin(mcfly_mod_data_t *data)
             {
                 high = elm327_hexascii_to_digit(c);
                 low = elm327_hexascii_to_digit(recv_msgs[i][msg_idx+1]);
-                data->binary[data_idx++] = low | high<<4;
+                data->binary[data_idx++] = (high<<4) | low;
                 msg_idx += 2;
             }
         }
@@ -252,18 +249,7 @@ static mcfly_err_t get_vin(mcfly_mod_data_t *data)
         msg_idx = 2;
     }
 
-#ifdef DEBUG_ANNOY
-    {
-        int _i, _j;
-        printf("[elm327_module] VIN: ");
-        for (_i=0; _i<5; ++_i)
-          for (_j=3; _j<6; ++_j)
-            printf("%c(0x%02x) ", recv_msgs[_i][_j], recv_msgs[_i][_j]);
-        printf("\n");
-    }
-#endif
-    
-    //elm327_destroy_recv_msgs(recv_msgs);
+    elm327_destroy_recv_msgs(recv_msgs);
 
     return MCFLY_SUCCESS;
 }
