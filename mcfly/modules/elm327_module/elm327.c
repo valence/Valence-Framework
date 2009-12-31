@@ -22,14 +22,6 @@ struct termios elm327_termios_original;
 unsigned int elm327_timeout_seconds = 1;
 
 
-/* 
- * Forwards
- */
-
-static unsigned char hexascii_to_digit(unsigned char hex);
-static unsigned char digit_to_hexascii(unsigned char dig);
-
-
 /*
  * Defined
  */
@@ -117,10 +109,10 @@ void elm327_msg_to_ascii(const elm327_msg_t msg, elm327_msg_as_ascii_t ascii)
     for (i=0, offset=0; i<OBD_MAX_MSG_SIZE; ++i, offset+=2)
     {
         /* High nybble */
-        ascii[offset] = digit_to_hexascii((msg[i] & 0xF0) >> 4);
+        ascii[offset] = elm327_digit_to_hexascii((msg[i] & 0xF0) >> 4);
 
         /* Low nybble */
-        ascii[offset+1] = digit_to_hexascii(msg[i] & 0x0F);
+        ascii[offset+1] = elm327_digit_to_hexascii(msg[i] & 0x0F);
     }
 }
 
@@ -137,8 +129,8 @@ void elm327_ascii_to_msg(const elm327_msg_as_ascii_t ascii, elm327_msg_t msg)
         if (!isalnum(ascii[offset]))
           break;
 
-        high = hexascii_to_digit(ascii[offset]);
-        low = hexascii_to_digit(ascii[offset+1]);
+        high = elm327_hexascii_to_digit(ascii[offset]);
+        low = elm327_hexascii_to_digit(ascii[offset+1]);
         msg[i] = (high<<4) | low;
     }
 }
@@ -276,7 +268,7 @@ void elm327_destroy_recv_msgs(elm327_msg_t *msgs)
 }
 
 
-static unsigned char hexascii_to_digit(unsigned char hex)
+unsigned char elm327_hexascii_to_digit(unsigned char hex)
 {
     if (isdigit(hex))
       return hex - '0';
@@ -285,7 +277,7 @@ static unsigned char hexascii_to_digit(unsigned char hex)
 }
 
 
-static unsigned char digit_to_hexascii(unsigned char dig)
+unsigned char elm327_digit_to_hexascii(unsigned char dig)
 {
     if (dig >= 10)
       return 'A' + (dig - 10);

@@ -194,51 +194,63 @@ static mcfly_err_t get_ambient_air(mcfly_mod_data_t *data)
 
 static mcfly_err_t get_vin(mcfly_mod_data_t *data)
 {
-    int           n_msgs;
+    int           i, n_msgs, msg_idx, data_idx;
+    char          c, high, low;
     mcfly_err_t   err;
-    elm327_msg_t *recv_msgs = NULL;
+    //elm327_msg_t *recv_msgs = NULL;
 
-    QUERY_OR_ERR(OBD_MODE_9, 0x02, &recv_msgs, &n_msgs, 1);
+    // QUERY_OR_ERR(OBD_MODE_9, 0x02, &recv_msgs, &n_msgs, 1);
 
-    /* Need 5 rows or messages */
+    /* Need 5 rows or messages
     if (n_msgs < 5)
       return MCFLY_ERR_NOCMD;
+    */
 
-    /* Five rows of values with bytes 3,4,5,6 from each row */
-    if ((err = mcfly_mod_data_initialize(data, 5 * 5)) != MCFLY_SUCCESS)
+    /* Five rows of vals with at least 16 chars per row (256 should be ok) */
+    /*if ((err = mcfly_mod_data_initialize(data, 256)) != MCFLY_SUCCESS)
     {
         elm327_destroy_recv_msgs(recv_msgs);
         return err;
-    }
+    }*/
 
     /* CAN format is default for ELM327 pdf (pg 37)
      * So we skip the first returned result which is the number of bytes.
      * Then we keep reading till we hit ':' and then remove the previous number.
      * So we remove 1: and the rest is data.
      */
-    /*data_idx = 0;*/
+    data_idx = 0;
 
-    /* Skip the first 3 bytes */
-    /*msg_idx = 3;*/
+    /* Skip the first 8 chars (which is 0:490201) */
+    msg_idx = 8;
 
-    /* TODO Start at second row skipping "number of bytes" 
+    char recv_msgs[5][32];
+    memset(recv_msgs, 0, 5*32);
+    data->binary = calloc(1, 256);
+    strcpy(recv_msgs[0], "014");
+    strcpy(recv_msgs[1], "0:4902014A4D312");
+    strcpy(recv_msgs[2], "1:424C31483531412:1234");
+    strcpy(recv_msgs[3], "2:31313830383832");
+
+    /* Start at second row skipping "number of bytes" */
     for (i=1; i<5; ++i)
     {
-        while (data_idx < (5*5))
+        while (data_idx < 256)
         {
-            if ((c = recv_msg[i][msg_idx]) == ':')
-              --data_idx;
-            else if (c == 0x0)
+            c = recv_msgs[i][msg_idx];
+            if ((c == 0x0) || (c == ':'))
               break;
             else
             {
-                data->binary[data_idx] = c;
-                ++data_idx;
+                high = elm327_hexascii_to_digit(c);
+                low = elm327_hexascii_to_digit(recv_msgs[i][msg_idx+1]);
+                data->binary[data_idx++] = low | high<<4;
+                msg_idx += 2;
             }
         }
-        msg_idx = 0;
+
+        /* Skip first two characters '1:' or '2:' etc */
+        msg_idx = 2;
     }
-    */
 
 #ifdef DEBUG_ANNOY
     {
@@ -251,7 +263,7 @@ static mcfly_err_t get_vin(mcfly_mod_data_t *data)
     }
 #endif
     
-    elm327_destroy_recv_msgs(recv_msgs);
+    //elm327_destroy_recv_msgs(recv_msgs);
 
     return MCFLY_SUCCESS;
 }

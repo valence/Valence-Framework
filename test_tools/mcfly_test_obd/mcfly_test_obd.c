@@ -46,12 +46,12 @@ static void query_all(const mcfly_t handle)
     mcfly_mod_data_t data_kph, data_rpm, data_temp;
     mcfly_mod_data_t data_vin, data_throttle, data_stds;
 
-    query(handle, MCFLY_MOD_CMD_OBD_SPEED, &data_kph);
-    query(handle, MCFLY_MOD_CMD_OBD_RPM, &data_rpm);
-    query(handle, MCFLY_MOD_CMD_OBD_AMBIENT_AIR, &data_temp);
+//    query(handle, MCFLY_MOD_CMD_OBD_SPEED, &data_kph);
+//    query(handle, MCFLY_MOD_CMD_OBD_RPM, &data_rpm);
+//    query(handle, MCFLY_MOD_CMD_OBD_AMBIENT_AIR, &data_temp);
     query(handle, MCFLY_MOD_CMD_OBD_VIN, &data_vin);
-    query(handle, MCFLY_MOD_CMD_OBD_THROTTLE_POS, &data_throttle);
-    query(handle, MCFLY_MOD_CMD_OBD_STANDARDS, &data_stds);
+//    query(handle, MCFLY_MOD_CMD_OBD_THROTTLE_POS, &data_throttle);
+//    query(handle, MCFLY_MOD_CMD_OBD_STANDARDS, &data_stds);
 
     /* Check the resulting data for speed:
      * Note: We know that the speed is stored in the 'value' and not the

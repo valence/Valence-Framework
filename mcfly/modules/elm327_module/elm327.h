@@ -118,4 +118,11 @@ extern void elm327_destroy_recv_msgs(elm327_msg_t *msgs);
 #define elm327_flush(_fd) tcflush(_fd, TCIOFLUSH)
 
 
+/* Convert either a ascii character(hexadecimal) to ascii decimal
+ * or vice versa
+ */
+unsigned char elm327_hexascii_to_digit(unsigned char hex);
+unsigned char elm327_digit_to_hexascii(unsigned char dig);
+
+
 #endif /* _ELM327_H */
