@@ -14,7 +14,7 @@ $(APP): $(OBJS)
 %.oo: %.cc
 	$(CXX) -c $< -o $@ -I$(INCLUDE) $(CFLAGS) $(ADDITIONAL_CFLAGS)
 
-test:
+test: $(APP)
 	LD_LIBRARY_PATH=../ ./testapp
 
 include ../../../make.inc
