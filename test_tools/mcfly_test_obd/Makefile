@@ -15,3 +15,5 @@ test: $(APP)
 
 clean:
 	rm -rfv $(APP)
+
+brandon: clean all test
