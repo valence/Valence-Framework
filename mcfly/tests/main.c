@@ -132,6 +132,9 @@ static mcfly_err_t test_reg_recv(void)
         return MCFLY_ERR_WRITE;
     }
 
+    /* Give the dummy module's thread sometime to execute */
+    sleep(1);
+
     return (recieved) ? MCFLY_SUCCESS : MCFLY_ERR_MODRECV;
 }
 

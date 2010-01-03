@@ -56,8 +56,7 @@ extern void mcfly_shutdown(mcfly_t mcfly);
  * data: Input data to send, or output data to receive
  *
  * Returns: MCFLY_SUCCESS on success, error otherwise.
- *          If data is to be returned, it is placed
- *          in 'data'
+ *          If data is to be returned, it is placed in 'data'
  */
 extern mcfly_err_t mcfly_command(
     const mcfly_mod_t *mod,
@@ -106,6 +105,5 @@ extern mcfly_err_t mcfly_command_by_name(
     const char       *mod_name,
     mcfly_mod_cmd_t   cmd,
     mcfly_mod_data_t *data);
-
 
 #endif /* _MCFLY_LIBRARY_H */

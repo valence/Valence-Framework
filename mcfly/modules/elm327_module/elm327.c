@@ -22,14 +22,6 @@ struct termios elm327_termios_original;
 unsigned int elm327_timeout_seconds = 1;
 
 
-/* 
- * Forwards
- */
-
-static unsigned char hexascii_to_digit(unsigned char hex);
-static unsigned char digit_to_hexascii(unsigned char dig);
-
-
 /*
  * Defined
  */
@@ -117,17 +109,17 @@ void elm327_msg_to_ascii(const elm327_msg_t msg, elm327_msg_as_ascii_t ascii)
     for (i=0, offset=0; i<OBD_MAX_MSG_SIZE; ++i, offset+=2)
     {
         /* High nybble */
-        ascii[offset] = digit_to_hexascii((msg[i] & 0xF0) >> 4);
+        ascii[offset] = elm327_digit_to_hexascii((msg[i] & 0xF0) >> 4);
 
         /* Low nybble */
-        ascii[offset+1] = digit_to_hexascii(msg[i] & 0x0F);
+        ascii[offset+1] = elm327_digit_to_hexascii(msg[i] & 0x0F);
     }
 }
 
 
 void elm327_ascii_to_msg(const elm327_msg_as_ascii_t ascii, elm327_msg_t msg)
 {
-    int  i, offset;
+    int           i, offset;
     unsigned char low, high;
     
     memset(msg, 0, sizeof(elm327_msg_t));
@@ -137,8 +129,8 @@ void elm327_ascii_to_msg(const elm327_msg_as_ascii_t ascii, elm327_msg_t msg)
         if (!isalnum(ascii[offset]))
           break;
 
-        high = hexascii_to_digit(ascii[offset]);
-        low = hexascii_to_digit(ascii[offset+1]);
+        high = elm327_hexascii_to_digit(ascii[offset]);
+        low = elm327_hexascii_to_digit(ascii[offset+1]);
         msg[i] = (high<<4) | low;
     }
 }
@@ -164,7 +156,7 @@ int elm327_send_msg(int fd, elm327_msg_t msg)
 }
 
 
-elm327_msg_t *elm327_recv_msgs(int fd, int *n_msgs)
+elm327_msg_t *elm327_recv_msgs(int fd, int *n_msgs, int ascii)
 {
     int                    msg_idx, char_idx, i, n_lines;
     char                   c, prev, *st, *look, buf[256] = {0};
@@ -248,8 +240,12 @@ elm327_msg_t *elm327_recv_msgs(int fd, int *n_msgs)
         return NULL;
     }
 
-    for (msg_idx=0; msg_idx<n_lines; ++msg_idx)
-      elm327_ascii_to_msg(ascii_msgs[msg_idx], msgs[msg_idx]);
+    /* If ascii is requested copy em to msgs */
+    if (ascii)
+      memcpy(msgs, ascii_msgs, n_lines * sizeof(elm327_msg_t));
+    else
+      for (msg_idx=0; msg_idx<n_lines; ++msg_idx)
+        elm327_ascii_to_msg(ascii_msgs[msg_idx], msgs[msg_idx]);
 
 #ifdef DEBUG_ANNOY
     printf("elm327 received %d messages:\n", n_lines);
@@ -272,7 +268,7 @@ void elm327_destroy_recv_msgs(elm327_msg_t *msgs)
 }
 
 
-static unsigned char hexascii_to_digit(unsigned char hex)
+unsigned char elm327_hexascii_to_digit(unsigned char hex)
 {
     if (isdigit(hex))
       return hex - '0';
@@ -281,7 +277,7 @@ static unsigned char hexascii_to_digit(unsigned char hex)
 }
 
 
-static unsigned char digit_to_hexascii(unsigned char dig)
+unsigned char elm327_digit_to_hexascii(unsigned char dig)
 {
     if (dig >= 10)
       return 'A' + (dig - 10);

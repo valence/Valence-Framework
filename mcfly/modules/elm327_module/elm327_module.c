@@ -86,8 +86,9 @@ static mcfly_err_t shutdown(const mcfly_t mcfly, mcfly_mod_t *me)
 static mcfly_err_t query_elm(
     OBD_MODE       mode,
     OBD_PARAM      pid,
-    elm327_msg_t **msgs,   /* Returned data from ELM327   */
-    int           *n_msgs) /* Number of messages returned */
+    elm327_msg_t **msgs,   /* Returned data from ELM327                 */
+    int           *n_msgs, /* Number of messages returned               */
+    int            ascii)  /* True if we want ascii vs binary data back */
 {
     elm327_msg_t send_msg;
 
@@ -98,7 +99,7 @@ static mcfly_err_t query_elm(
       return MCFLY_ERR_CMDSEND;
     
     /* Receive */
-    if ((*msgs = elm327_recv_msgs(elm327_mod_fd, n_msgs)) == NULL)
+    if ((*msgs = elm327_recv_msgs(elm327_mod_fd, n_msgs, 0)) == NULL)
       return MCFLY_ERR_MODRECV;
 
     /* Flush */
@@ -108,15 +109,16 @@ static mcfly_err_t query_elm(
 }
 
 
-#define QUERY_OR_ERR(_mode, _pid, _recv, _n_recv)                         \
-{                                                                         \
-    mcfly_err_t _err;                                                     \
-                                                                          \
-    if ((_err = query_elm(_mode, _pid, _recv, _n_recv)) != MCFLY_SUCCESS) \
-    {                                                                     \
-        elm327_destroy_recv_msgs(*_recv);                                 \
-        return _err;                                                      \
-    }                                                                     \
+#define QUERY_OR_ERR(_mode, _pid, _recv, _n_recv, _ascii)           \
+{                                                                   \
+    mcfly_err_t _err;                                               \
+                                                                    \
+    if ((_err = query_elm(                                          \
+            _mode, _pid, _recv, _n_recv, _ascii)) != MCFLY_SUCCESS) \
+    {                                                               \
+        elm327_destroy_recv_msgs(*_recv);                           \
+        return _err;                                                \
+    }                                                               \
 }
 
 
@@ -124,7 +126,7 @@ static mcfly_err_t get_speed(mcfly_mod_data_t *data)
 {
     elm327_msg_t *recv_msg = NULL;
 
-    QUERY_OR_ERR(OBD_MODE_1, 0x0D, &recv_msg, NULL);
+    QUERY_OR_ERR(OBD_MODE_1, 0x0D, &recv_msg, NULL, 0);
 
     /* Convert speed (first byte is speed in kph) */
     data->value = (double)((*recv_msg)[2]);
@@ -138,7 +140,7 @@ static mcfly_err_t get_rpm(mcfly_mod_data_t *data)
 {
     elm327_msg_t *recv_msg = NULL;
 
-    QUERY_OR_ERR(OBD_MODE_1, 0x0C, &recv_msg, NULL);
+    QUERY_OR_ERR(OBD_MODE_1, 0x0C, &recv_msg, NULL, 0);
 
     /* Convert RPM */
     data->value = (((*recv_msg)[2] * 256) + (*recv_msg[3])) / 4.0;
@@ -152,7 +154,7 @@ static mcfly_err_t get_throttle_pos(mcfly_mod_data_t *data)
 {
     elm327_msg_t *recv_msg = NULL;
 
-    QUERY_OR_ERR(OBD_MODE_1, 0x11, &recv_msg, NULL);
+    QUERY_OR_ERR(OBD_MODE_1, 0x11, &recv_msg, NULL, 0);
 
     /* Convert throttle position */
     data->value = ((*recv_msg)[2] * 100.0) / 255.0;
@@ -166,7 +168,7 @@ static mcfly_err_t get_standards(mcfly_mod_data_t *data)
 {
     elm327_msg_t *recv_msg = NULL;
 
-    QUERY_OR_ERR(OBD_MODE_1, 0x1C, &recv_msg, NULL);
+    QUERY_OR_ERR(OBD_MODE_1, 0x1C, &recv_msg, NULL, 0);
 
     /* Bit encoded standards supported */
     data->value = (double)((*recv_msg)[2]);
@@ -180,7 +182,7 @@ static mcfly_err_t get_ambient_air(mcfly_mod_data_t *data)
 {
     elm327_msg_t *recv_msg = NULL;
 
-    QUERY_OR_ERR(OBD_MODE_1, 0x46, &recv_msg, NULL);
+    QUERY_OR_ERR(OBD_MODE_1, 0x46, &recv_msg, NULL, 0);
 
     /* Ambient air temperature */
     data->value = (double)((*recv_msg)[2] - 40.0);
@@ -192,63 +194,61 @@ static mcfly_err_t get_ambient_air(mcfly_mod_data_t *data)
 
 static mcfly_err_t get_vin(mcfly_mod_data_t *data)
 {
-    int           n_msgs;
+    int           i, n_msgs, msg_idx, data_idx;
+    char          c, high, low;
     mcfly_err_t   err;
     elm327_msg_t *recv_msgs = NULL;
 
-    QUERY_OR_ERR(OBD_MODE_9, 0x02, &recv_msgs, &n_msgs);
+    QUERY_OR_ERR(OBD_MODE_9, 0x02, &recv_msgs, &n_msgs, 1);
 
-    /* Need 5 rows or messages */
-    if (n_msgs < 5)
+    /* Expect at least 4 rows or messages (CAN format from ELM327) */
+    if (n_msgs < 4)
       return MCFLY_ERR_NOCMD;
 
-    /* Five rows of values with bytes 3,4,5,6 from each row */
-    if ((err = mcfly_mod_data_initialize(data, 5 * 5)) != MCFLY_SUCCESS)
+    /* Five rows of vals with at least 16 chars per row (256 should be ok) */
+    if ((err = mcfly_mod_data_initialize(data, 256)) != MCFLY_SUCCESS)
     {
         elm327_destroy_recv_msgs(recv_msgs);
         return err;
     }
 
     /* CAN format is default for ELM327 pdf (pg 37)
+     * Which looks something like:
+     * Row 1: <Number of Bytes>
+     * Row 2: 0:4209XXXXXXXX
+     * Row 3: 1:XXXXXXXXXXXXXX
+     * Row 4: 2:XXXXXXXXXXXXXX
+     *
      * So we skip the first returned result which is the number of bytes.
      * Then we keep reading till we hit ':' and then remove the previous number.
      * So we remove 1: and the rest is data.
      */
-
-    /* TODO: Skip the first 3 bytes
     data_idx = 0;
-    msg_idx = 3;
-    for (i=2; i<5; ++i)
+
+    /* Skip the first 8 chars (which are 0:490201) */
+    msg_idx = 8;
+
+    /* Start at second row skipping "number of bytes" */
+    for (i=1; i<n_msgs; ++i)
     {
-        while (data_idx < (5*5))
+        while (data_idx < 256)
         {
-            if ((c = recv_msg[i][msg_idx]) == ':')
-              --data_idx;
-            else if (c == 0x0)
+            c = recv_msgs[i][msg_idx];
+            if ((c == 0x0) || (c == ':'))
               break;
             else
             {
-                data->binary[data_idx] = c;
-                ++data_idx;
+                high = elm327_hexascii_to_digit(c);
+                low = elm327_hexascii_to_digit(recv_msgs[i][msg_idx+1]);
+                data->binary[data_idx++] = (high<<4) | low;
+                msg_idx += 2;
             }
         }
-        msg_idx = 0;
-    }
-    */
-      
 
-#ifdef DEBUG_ANNOY
-    {
-        int _i, _j;
-        printf("[elm327_module] VIN: ");
-        for (_i=0; _i<5; ++_i)
-          for (_j=3; _j<6; ++_j)
-            printf("%c(0x%02x) ", recv_msgs[_i][_j], recv_msgs[_i][_j]);
-        printf("\n");
+        /* Skip first two characters '1:' or '2:' etc */
+        msg_idx = 2;
     }
-#endif
-    
-    /* VIN bytes 3,4,5,6 (byte 2 is line order) */
+
     elm327_destroy_recv_msgs(recv_msgs);
 
     return MCFLY_SUCCESS;
