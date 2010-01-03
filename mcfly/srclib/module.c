@@ -169,7 +169,7 @@ mcfly_err_t mcfly_mod_query_by_type(
           break;
     }
 
-    if (!mod)
+    if (!mod || (mod->type != type))
       return MCFLY_ERR_NOMOD;
 
     /* Ask Jeeves */
@@ -247,6 +247,8 @@ static void failed_init(const mcfly_t mcfly, mcfly_mod_t *mod)
                 mod->last_err = err;                               \
               if (do_extra)                                        \
                 do_extra(mcfly, mod);                              \
+              if (err)                                             \
+                return err;                                        \
           }                                                        \
                                                                    \
         return MCFLY_SUCCESS;                                      \

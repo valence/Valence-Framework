@@ -25,7 +25,10 @@ mcfly_list_node_t *mcfly_util_list_remove(mcfly_list_node_t *entry)
 
     /* End of the list? */
     if (!entry->next)
-      return NULL;
+    {
+        entry->prev->next = NULL;
+        return NULL;
+    }
     
     entry->prev->next = entry->next;
     entry->next->prev = entry->prev;
