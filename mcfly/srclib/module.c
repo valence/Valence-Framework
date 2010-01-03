@@ -95,7 +95,7 @@ mcfly_err_t mcfly_mod_load(mcfly_t mcfly)
             dlclose(handle);
             continue;
         }
-
+        
         mod->dl_handle = handle;
 
         if (!mcfly->modules)
@@ -202,6 +202,26 @@ mcfly_err_t mcfly_mod_query_by_name(
 }
 
 
+static void failed_init(const mcfly_t mcfly, mcfly_mod_t *mod)
+{
+    const mcfly_mod_t *matchme;
+    mcfly_list_node_t *itr;
+
+    if (mod->last_err == MCFLY_SUCCESS)
+      return;
+
+    /* Find the module that failed and remove it */
+    for (itr=&mcfly->modules->list; itr; itr=itr->next)
+      if ((matchme = mcfly_util_list_get(itr, mcfly_mod_t, list)) &&
+          (matchme == mod))
+      {
+          itr = mcfly_util_list_remove(itr);
+          mod->shutdown(mcfly, mod);
+          break;
+      }
+}
+
+
 /* Call the passed in routine name, a callback in the mcfly_mod_t structure,
  * on all of the mcfly_mod_t instances in the mcfly handle.
  */
@@ -211,7 +231,7 @@ mcfly_err_t mcfly_mod_query_by_name(
         mcfly_mod_t       *mod;                                    \
         mcfly_err_t        err;                                    \
         mcfly_list_node_t *itr;                                    \
-        void (*do_extra)(mcfly_mod_t *mod);                        \
+        void (*do_extra)(const mcfly_t mcfly, mcfly_mod_t *mod);   \
                                                                    \
         do_extra = _extra_fcn;                                     \
                                                                    \
@@ -221,14 +241,16 @@ mcfly_err_t mcfly_mod_query_by_name(
         for (itr=&mcfly->modules->list; itr; itr=itr->next)        \
           if ((mod = mcfly_util_list_get(itr, mcfly_mod_t, list))) \
           {                                                        \
+              if (mod->type == MCFLY_MOD_TYPE_IGNORE)              \
+                continue;                                          \
               if ((err = mod->_name(mcfly, mod)) != MCFLY_SUCCESS) \
-                return err;                                        \
-              else if (do_extra)                                   \
-                do_extra(mod);                                     \
+                mod->last_err = err;                               \
+              if (do_extra)                                        \
+                do_extra(mcfly, mod);                              \
           }                                                        \
                                                                    \
         return MCFLY_SUCCESS;                                      \
     }
 
-_call_routine_on_all(init, NULL)     /* mcfly_mod_init()     */
-_call_routine_on_all(shutdown, NULL) /* mcfly_mod_shutdown() */
+_call_routine_on_all(init, failed_init) /* mcfly_mod_init()     */
+_call_routine_on_all(shutdown, NULL)    /* mcfly_mod_shutdown() */

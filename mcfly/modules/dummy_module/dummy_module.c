@@ -133,6 +133,7 @@ mcfly_mod_t MCFLY_MODULE_STRUCT_SYMBOL =
 {
     .name = "dummy_module",
     .dl_handle = NULL,
+    .last_err = MCFLY_SUCCESS,
     .type = MCFLY_MOD_TYPE_DUMMY,
     .configs = NULL,
     .init = dummy_init,

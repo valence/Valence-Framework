@@ -130,6 +130,9 @@ struct _mcfly_mod_t
     /* When this module is loaded dynamically the handle is placed here */
     void *dl_handle;
 
+    /* Last error encountered */
+    mcfly_err_t last_err;
+
     /* What type of module this is */
     mcfly_mod_type_t type;
     

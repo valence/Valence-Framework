@@ -19,7 +19,12 @@ void mcfly_util_list_add(mcfly_list_node_t *head, mcfly_list_node_t *entry)
 
 mcfly_list_node_t *mcfly_util_list_remove(mcfly_list_node_t *entry)
 {
+    /* Head? */
     if ((entry == entry->prev) && (entry == entry->next))
+      return NULL;
+
+    /* End of the list? */
+    if (!entry->next)
       return NULL;
     
     entry->prev->next = entry->next;

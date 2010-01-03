@@ -39,8 +39,8 @@ mcfly_err_t mcfly_init(const char *config, mcfly_t *mcfly)
     ERR(mcfly_mod_load(*mcfly));
 
     /* Initalize the modules */
-    ERR(mcfly_mod_init(*mcfly))
-
+    ERR(mcfly_mod_init(*mcfly));
+    
     return MCFLY_SUCCESS;
 }
 

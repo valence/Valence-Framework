@@ -19,7 +19,7 @@ typedef struct _mcfly_err_code_t *mcfly_err_t;
 
 
 /* Error codes */
-static const mcfly_err_t MCFLY_SUCCESS = NULL;
+#define MCFLY_SUCCESS NULL
 _new_err_code(1,  MCFLY_ERR_UNKNOWN,     "Unknown")
 _new_err_code(2,  MCFLY_ERR_NOMEM,       "Out of Memory")
 _new_err_code(3,  MCFLY_ERR_INVALID_ARG, "Invalid Argument")

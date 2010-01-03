@@ -278,6 +278,7 @@ mcfly_mod_t MCFLY_MODULE_STRUCT_SYMBOL =
 {
     .name = "elm327_module",
     .dl_handle = NULL,
+    .last_err = MCFLY_SUCCESS,
     .type = MCFLY_MOD_TYPE_OBD,
     .configs = NULL,
     .init = elm327_mod_init,
