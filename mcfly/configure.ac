@@ -68,9 +68,6 @@ fi
 AC_SUBST(CFLAGS)
 AC_SUBST(USE_CPP_BINDINGS)
 
-echo "Use cpp bindings: "
-echo $USE_CPP_BINDINGS
-
 
 # Cholesteral
 CLIBS="-ldl -lpthread"

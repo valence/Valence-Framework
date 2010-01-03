@@ -4768,9 +4768,6 @@ fi
 
 
 
-echo "Use cpp bindings: "
-echo $USE_CPP_BINDINGS
-
 
 # Cholesteral
 CLIBS="-ldl -lpthread"
