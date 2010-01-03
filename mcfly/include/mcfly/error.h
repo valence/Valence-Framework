@@ -42,7 +42,7 @@ _new_err_code(15, MCFLY_ERR_CMDSEND,     "Error Sending Command")
  *
  * Returns either an integer or the string representation of the error.
  */
-#define MCFLY_ERR_VAL(_err) _err->val
-#define MCFLY_ERR_STR(_err) _err->str
+#define MCFLY_ERR_VAL(_err) ((_err == MCFLY_SUCCESS) ? 0 : _err->val)
+#define MCFLY_ERR_STR(_err) ((_err == MCFLY_SUCCESS) ? "Success" : _err->str)
 
 #endif /* _MCFLY_ERROR_H */
