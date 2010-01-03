@@ -4,7 +4,6 @@
 /* These are the various types of modules for the base Mcfly system */
 typedef enum _mcfly_mod_type_t
 {
-    MCFLY_MOD_TYPE_IGNORE,
     MCFLY_MOD_TYPE_DUMMY,
     MCFLY_MOD_TYPE_OBD,
 } mcfly_mod_type_t;
