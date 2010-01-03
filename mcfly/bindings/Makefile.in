@@ -1,5 +1,9 @@
-SUBDIRS = cpp
+SUBDIRS =
 EXTRA_CLEAN = Makefile
+
+ifeq (@USE_CPP_BINDINGS@,1)
+	SUBDIRS += cpp
+endif
 
 all: $(SUBDIRS)
 	@for i in $(SUBDIRS); do $(MAKE) -C $$i; done

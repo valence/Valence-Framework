@@ -10,6 +10,11 @@ AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_MAKE_SET
 
+# If we have cpp enable bindings
+if test -z "$CXX"; then
+    enable_cpp_bindings="set";
+fi
+
 
 # Checks for header files.
 AC_HEADER_DIRENT
@@ -33,6 +38,12 @@ AC_CHECK_FUNCS([memset select mkfifo strchr])
 # Flags
 CFLAGS="-Wall"
 
+AC_ARG_ENABLE([cpp-bindings],
+              [AC_HELP_STRING([--enable-cpp-bindings], 
+                              [Enable C++ bindings])],
+              [USE_CPP_BINDINGS=1],
+              [USE_CPP_BINDINGS=0]) # <---- Default
+
 AC_ARG_ENABLE([debug],
               [AC_HELP_STRING([--enable-debug], [Enable debugging build])],
               [CFLAGS="$CFLAGS -DDEBUG"])
@@ -42,6 +53,11 @@ AC_ARG_ENABLE([debug-annoy],
                               [Enable really verbose debugging])],
               [CFLAGS="$CFLAGS -DDEBUG -DDEBUG_ANNOY"])
 
+# If we never asked for cpp bindings OR we couldnt find a compiler disable cpp
+if test "${enable_cpp_bindings+set}" != set || test -z "${CXX}"; then
+    USE_CPP_BINDINGS=0;
+fi
+
 # If we have not enabled debug set common flags
 if test "${enable_debug+set}" != set && test "${enable_debug_annoy+set}" != set; then
     CFLAGS="$CFLAGS -O3"
@@ -50,6 +66,10 @@ else
 fi
 
 AC_SUBST(CFLAGS)
+AC_SUBST(USE_CPP_BINDINGS)
+
+echo "Use cpp bindings: "
+echo $USE_CPP_BINDINGS
 
 
 # Cholesteral
