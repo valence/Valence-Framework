@@ -77,6 +77,9 @@ int elm327_init(const char *device_path)
 
 void elm327_shutdown(int fd)
 {
+    if (fd == -1)
+      return;
+
     tcsetattr(fd, TCSANOW, &elm327_termios_original);
     close(fd);
 }
