@@ -89,7 +89,7 @@ extern mcfly_err_t mcfly_mod_register_recieve(
  * mcfly:       Mcfly handle
  * module_name: Name of the module to obtain
  *
- * Returns the first module with the given module name, NULL otherwise.
+ * Returns: The first module with the given module name, NULL otherwise.
  */
 extern mcfly_mod_t *mcfly_mod_find(
     const mcfly_t  mcfly,
@@ -103,7 +103,8 @@ extern mcfly_mod_t *mcfly_mod_find(
  * mod: Module to query
  * cmd: Command to query with
  * data: Data to send or receive to/from the specified module
- * Returns MCFLY_SUCCESS on success, error otherwise
+ *
+ * Returns: MCFLY_SUCCESS on success, error otherwise
  */
 extern mcfly_err_t mcfly_mod_query(
     const mcfly_mod_t *mod,
@@ -140,13 +141,13 @@ extern mcfly_err_t mcfly_mod_query_by_type(
  * mod_name: Name of the module to query
  * cmd:      Command to query with
  * data:     Data to send or receive to/from the specified module
- * Returns MCFLY_SUCCESS on success, error otherwise
+ *
+ * Returns: MCFLY_SUCCESS on success, error otherwise
  */
 extern mcfly_err_t mcfly_mod_query_by_name(
     const mcfly_t     mcfly,
     const char       *mod_name,
     mcfly_mod_cmd_t   cmd,
     mcfly_mod_data_t *data);
-
 
 #endif /* _MCFLY_MODULE_H */

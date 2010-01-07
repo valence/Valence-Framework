@@ -27,10 +27,10 @@ extern void mcfly_util_list_add(
  * Remove the entry from the list.  This routine does not deallocate any
  * memory.
  *
- * Returns the next element in the list after itr.
- * In other words, this routine returns itr->next.
- *
  * entry: Element to remove
+ *
+ * Returns: the next element in the list after itr.
+ * In other words, this routine returns itr->next.
  */
 extern mcfly_list_node_t *mcfly_util_list_remove(mcfly_list_node_t *entry);
 
