@@ -4,7 +4,8 @@
 #include <stdlib.h>
 
 
-/* Error codes in McFly are actually structures of the value and its
+/**
+ * Error codes in McFly are actually structures of the value and its
  * corresponding description.  When error codes are compared, since they are
  * static, just the addresses get compared.  When you print an error code or
  * actually want to use one, the proper macros should be used: MCFLY_ERR_VAL()
@@ -18,6 +19,7 @@ typedef struct _mcfly_err_code_t *mcfly_err_t;
     static const mcfly_err_t _name = &((struct _mcfly_err_code_t){_val, _str});
 
 
+/** Error codes */
 /* Error codes */
 #define MCFLY_SUCCESS NULL
 _new_err_code(1,  MCFLY_ERR_UNKNOWN,     "Unknown")
@@ -37,10 +39,13 @@ _new_err_code(14, MCFLY_ERR_NOCMD,       "Command Not Supported")
 _new_err_code(15, MCFLY_ERR_CMDSEND,     "Error Sending Command")
 
 
-/* MCFLY_ERR_VAL
+/** 
+ * MCFLY_ERR_VAL
  * MCFLY_ERR_STR
  *
- * Returns either an integer or the string representation of the error.
+ * @param _err Error object
+ *
+ * @return Either an integer or the string representation of the error.
  */
 #define MCFLY_ERR_VAL(_err) ((_err == MCFLY_SUCCESS) ? 0 : _err->val)
 #define MCFLY_ERR_STR(_err) ((_err == MCFLY_SUCCESS) ? "Success" : _err->str)

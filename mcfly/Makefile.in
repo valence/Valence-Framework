@@ -7,6 +7,9 @@ all: $(SUBDIRS)
 clean:
 	@for i in $(SUBDIRS); do $(MAKE) clean -C $$i; done
 
+.PHONY docs: Doxyfile
+	doxygen Doxyfile
+
 test: all
 	$(MAKE) test -C bindings/
 	$(MAKE) test -C tests/

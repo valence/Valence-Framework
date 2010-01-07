@@ -1,7 +1,7 @@
 #ifndef _MCFLY_MODULES_COMMANDS_H
 #define _MCFLY_MODULES_COMMANDS_H
 
-/* These are commands supported by the base Mcfly system modules */
+/** These are commands supported by the base Mcfly system modules */
 typedef enum _mcfly_mod_cmd_t
 {
     /* Default */

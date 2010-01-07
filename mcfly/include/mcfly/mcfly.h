@@ -7,6 +7,7 @@
 #include <mcfly/modules/mod_types.h>
 
 
+/** Current version */
 #define MCFLY_VERSION "0.0"
 
 

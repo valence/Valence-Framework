@@ -8,28 +8,29 @@
 
 
 /*
- * Global Definitions
+ * Forwards
  */
 
-/* Maximum string length used in Mcfly */
-#define MCFLY_MAX_STRING_LEN 64
+typedef struct _mcfly_t           *mcfly_t;
+typedef struct _mcfly_list_node_t  mcfly_list_node_t;
+typedef struct _mcfly_cfg_def_t    mcfly_cfg_def_t;
+typedef struct _mcfly_cfg_t        mcfly_cfg_t;
+typedef struct _mcfly_mod_t        mcfly_mod_t;
 
 
 /*
- * Forwards
+ * Global Definitions
  */
-typedef struct _mcfly_cfg_def_t mcfly_cfg_def_t;
-typedef struct _mcfly_cfg_t mcfly_cfg_t;
-typedef struct _mcfly_mod_t mcfly_mod_t;
-typedef struct _mcfly_t *mcfly_t;
-typedef struct _mcfly_list_node_t mcfly_list_node_t;
+
+/** Maximum string length used in Mcfly */
+#define MCFLY_MAX_STRING_LEN 64
 
 
 /*
  * Primary
  */
 
-/* Mcfly handle */
+/** Mcfly handle */
 struct _mcfly_t
 {
     const char  *base_config_path;
@@ -40,7 +41,9 @@ struct _mcfly_t
 
 /*
  * Utilities 
- *
+ */
+
+/** Utility link-list data type
  * The list structure is similiar if not identical from how
  * Linux handles their lists.  I like their structure, its simple, and works.
  * So we are following theire role there.  Credit to those who created it.
@@ -56,7 +59,7 @@ struct _mcfly_list_node_t
  * Configuration
  */
 
-/* Type of values that can be stored in a config */
+/** Type of values that can be stored in a config */
 typedef enum _mcfly_cfg_value_t
 {
     MCFLY_CFG_VALUE_INT,
@@ -65,12 +68,12 @@ typedef enum _mcfly_cfg_value_t
 } mcfly_cfg_value_t;
 
 
-/* Base configuration keys */
+/** Base configuration keys */
 #define MCFLY_CFG_MODULES_PATH 1
 #define MCFLY_CFG_LOAD_MODULE  2
 
 
-/* Configuration definition */
+/** Configuration definition */
 struct _mcfly_cfg_def_t
 {
     char name[MCFLY_MAX_STRING_LEN];
@@ -86,7 +89,7 @@ struct _mcfly_cfg_def_t
 };
 
 
-/* Configuration entry */
+/** Configuration entry */
 struct _mcfly_cfg_t
 { 
     /* Info about this configuration entry */
@@ -101,14 +104,14 @@ struct _mcfly_cfg_t
     } value;
 
     mcfly_list_node_t list;
-}; 
+};
 
 
 /*
  * Modules
  */
 
-/* Callback prototypes */
+/** Callback prototypes */
 typedef mcfly_err_t (*mcfly_mod_fcn)(const mcfly_t mcfly, mcfly_mod_t *me);
 typedef mcfly_err_t (*mcfly_mod_cbfcn)(const mcfly_mod_t *mod,
                                        const void        *data,
@@ -117,7 +120,7 @@ typedef mcfly_err_t (*mcfly_mod_queryfcn)(mcfly_mod_cmd_t   cmd,
                                           mcfly_mod_data_t *data);
 
 
-/* Mcfly module structure
+/** Mcfly module structure
  * All modules must be named with the following symbol
  */
 #define MCFLY_MODULE_STRUCT_SYMBOL __mcfly_module
