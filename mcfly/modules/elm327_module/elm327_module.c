@@ -65,7 +65,8 @@ static mcfly_err_t elm327_mod_init(const mcfly_t mcfly, mcfly_mod_t *me)
       return MCFLY_ERR_MODINIT;
 
     /* Set the timeout for ELM (if it was set via config) else we will just use
-     * the ELM default */
+     * the ELM default
+     */
     if ((timeout = (int *)mcfly_cfg_get_from_key(me->configs,
                                                  ELM_MOD_CFG_TIMEOUT)))
     {
