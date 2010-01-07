@@ -1,6 +1,14 @@
 #ifndef _MCFLY_CPP_HH
 #define _MCFLY_CPP_HH
 
+// The following is an implementation of the base Mcfly API for C++.  Please
+// see the documentation for mcfly.h for more information regarding these
+// bindings.  Remember, that the base API covers functionality in mcfly.h.  The
+// rest of the API (non mcfly.h headers) is optional for bindings to implement.
+// The C++ bindings, at this time, do not support such "extended Mcfly API"
+// functionality.
+
+
 extern "C"
 {
 #include <mcfly/mcfly.h>
@@ -71,6 +79,5 @@ private:
 std::ostream &operator<<(std::ostream &os, const McflyException &ex);
 
 } // End of Mcfly namespace
-
 
 #endif // _MCFLY_CPP_HH
