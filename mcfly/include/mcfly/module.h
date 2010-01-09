@@ -104,7 +104,7 @@ extern mcfly_mod_t *mcfly_mod_find(
  * cmd: Command to query with
  * data: Data to send or receive to/from the specified module
  *
- * Returns: MCFLY_SUCCESS on success, error otherwise
+ * Returns: MCFLY_SUCCESS on success, error otherwise.
  */
 extern mcfly_err_t mcfly_mod_query(
     const mcfly_mod_t *mod,
@@ -124,7 +124,7 @@ extern mcfly_err_t mcfly_mod_query(
  * cmd:   Command to send the module (see modules/mod_commands.h)
  * data:  Data to send or receive to/from the specified module
  *
- * Returns MCFLY_SUCCESS on success, error otherwise.
+ * Returns: MCFLY_SUCCESS on success, error otherwise.
  */
 extern mcfly_err_t mcfly_mod_query_by_type(
     const mcfly_t     mcfly,
@@ -142,7 +142,7 @@ extern mcfly_err_t mcfly_mod_query_by_type(
  * cmd:      Command to query with
  * data:     Data to send or receive to/from the specified module
  *
- * Returns: MCFLY_SUCCESS on success, error otherwise
+ * Returns: MCFLY_SUCCESS on success, error otherwise.
  */
 extern mcfly_err_t mcfly_mod_query_by_name(
     const mcfly_t     mcfly,
