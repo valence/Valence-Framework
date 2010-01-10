@@ -106,4 +106,14 @@ extern mcfly_err_t mcfly_command_by_name(
     mcfly_mod_cmd_t   cmd,
     mcfly_mod_data_t *data);
 
+
+#ifdef DEBUG
+/* mcfly_spit
+ *
+ * Simple output testing routine.
+ * This just prints a string to standard out.
+ */
+extern void mcfly_spit(void);
+#endif /* DEBUG */
+
 #endif /* _MCFLY_LIBRARY_H */

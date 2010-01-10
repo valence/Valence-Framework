@@ -7,6 +7,10 @@
 #include <mcfly/modules/mod_commands.h>
 #include <mcfly/modules/mod_types.h>
 
+#ifdef DEBUG
+#include <stdio.h>
+#endif
+
 
 #define ERR(_expr)            \
 {                             \
@@ -88,3 +92,11 @@ mcfly_err_t mcfly_command_by_name(
 {
     return mcfly_mod_query_by_name(mcfly, mod_name, cmd, data);
 }
+
+
+#ifdef DEBUG
+void mcfly_spit(void)
+{
+    printf("Output to standard out works!\n");
+}
+#endif
