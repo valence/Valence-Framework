@@ -23,6 +23,13 @@
 #define MCFLY_KPH_TO_MPH(_kph) (_kph * 0.621371192)
 
 
+/* Debugging output */
+#ifdef DEBUG
+#define MCFLY_TAG "[libmcfly]"
+#define DEBUG_STR(_str) printf("\n" MCFLY_TAG "[debug] " _str "\n")
+#endif /* DEBUG */
+
+
 /* mcfly_init
  *
  * Initialize the Mcfly library.

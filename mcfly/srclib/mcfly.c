@@ -24,6 +24,8 @@ mcfly_err_t mcfly_init(const char *config, mcfly_t *mcfly)
 {
     mcfly_err_t err;
 
+    DEBUG_STR("Trying to initialize Mcfly...");
+
     if (!mcfly)
       return MCFLY_ERR_INVALID_ARG;
 
@@ -42,9 +44,10 @@ mcfly_err_t mcfly_init(const char *config, mcfly_t *mcfly)
     /* Load the modules */
     ERR(mcfly_mod_load(*mcfly));
 
-    /* Initalize the modules */
+    /* Initialize the modules */
     ERR(mcfly_mod_init(*mcfly));
     
+    DEBUG_STR("Successfully initialized Mcfly");
     return MCFLY_SUCCESS;
 }
 
