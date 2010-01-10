@@ -23,7 +23,7 @@ mcfly_err_t mcfly_init(const char *config, mcfly_t *mcfly)
     if (!mcfly)
       return MCFLY_ERR_INVALID_ARG;
 
-    if (!(*mcfly  = calloc(1, sizeof(struct _mcfly_t))))
+    if (!(*mcfly  = calloc(1, sizeof(mcfly_t))))
       return MCFLY_ERR_NOMEM;
 
     /* Load the base config */
