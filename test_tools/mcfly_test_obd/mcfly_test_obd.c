@@ -99,8 +99,8 @@ int main(void)
         sleep(1);
     }
 
-    /* Shutdown Mcfly (signal handler should catch, so this probably wont
-     * execute below here...
+    /* Shutdown Mcfly (signal handler should catch, so this probably won't
+     * execute below here...)
      */
     mcfly_shutdown(mcfly);
 
