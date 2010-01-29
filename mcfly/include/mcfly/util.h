@@ -47,6 +47,6 @@ extern mcfly_list_node_t *mcfly_util_list_remove(mcfly_list_node_t *entry);
  * Returns: The entry casted to '_type'
  */
 #define mcfly_util_list_get(_entry, _type, _next) \
-    ((_type *)((void *)_entry - offsetof(_type, _next)))
+    ((_type *)((char *)_entry - offsetof(_type, _next)))
 
 #endif /* _MCFLY_UTIL_H */
