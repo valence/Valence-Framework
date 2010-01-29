@@ -1,5 +1,6 @@
 CC = @CXX@
-CFLAGS = @CFLAGS@
+FLAGS = @FLAGS@
+CXXFLAGS = @CXXFLAGS@
 CLIBS = @CLIBS@
 INCLUDE = ../include -I../../../include
 OBJS = main.oo
@@ -12,7 +13,7 @@ $(APP): $(OBJS)
 	$(CXX) -o $@ $(OBJS) -L../ -lmcfly_cpp $(CLIBS)
 
 %.oo: %.cc
-	$(CXX) -c $< -o $@ -I$(INCLUDE) $(CFLAGS) $(ADDITIONAL_CFLAGS)
+	$(CXX) -c $< -o $@ -I$(INCLUDE) $(FLAGS) $(CXXFLAGS) $(ADDITIONAL_CFLAGS)
 
 test: $(APP)
 	LD_LIBRARY_PATH=../ ./testapp

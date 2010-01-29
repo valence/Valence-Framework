@@ -61,7 +61,7 @@ typedef enum _mcfly_cfg_value_t
 {
     MCFLY_CFG_VALUE_INT,
     MCFLY_CFG_VALUE_REAL,
-    MCFLY_CFG_VALUE_STRING,
+    MCFLY_CFG_VALUE_STRING
 } mcfly_cfg_value_t;
 
 
@@ -112,7 +112,7 @@ struct _mcfly_cfg_t
 typedef mcfly_err_t (*mcfly_mod_fcn)(const mcfly_t mcfly, mcfly_mod_t *me);
 typedef mcfly_err_t (*mcfly_mod_cbfcn)(const mcfly_mod_t *mod,
                                        const void        *data,
-                                       ssize_t            data_size);
+                                       size_t             data_size);
 typedef mcfly_err_t (*mcfly_mod_queryfcn)(mcfly_mod_cmd_t   cmd,
                                           mcfly_mod_data_t *data);
 

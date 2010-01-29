@@ -663,6 +663,7 @@ SET_MAKE
 CPP
 GREP
 EGREP
+FLAGS
 USE_CPP_BINDINGS
 CLIBS
 LIBOBJS
@@ -4264,69 +4265,6 @@ _ACEOF
 
 fi
 
-{ echo "$as_me:$LINENO: checking for ssize_t" >&5
-echo $ECHO_N "checking for ssize_t... $ECHO_C" >&6; }
-if test "${ac_cv_type_ssize_t+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-$ac_includes_default
-typedef ssize_t ac__type_new_;
-int
-main ()
-{
-if ((ac__type_new_ *) 0)
-  return 0;
-if (sizeof (ac__type_new_))
-  return 0;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_c_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-  ac_cv_type_ssize_t=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_type_ssize_t=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_type_ssize_t" >&5
-echo "${ECHO_T}$ac_cv_type_ssize_t" >&6; }
-if test $ac_cv_type_ssize_t = yes; then
-  :
-else
-
-cat >>confdefs.h <<_ACEOF
-#define ssize_t int
-_ACEOF
-
-fi
-
 
 
 # Checks for library functions.
@@ -4731,7 +4669,9 @@ done
 
 
 # Flags
-CFLAGS="-Wall"
+FLAGS="-Wall -pedantic"
+CFLAGS="-std=c99"
+CXXFLAGS="-std=c++98"
 
 # Check whether --enable-cpp-bindings was given.
 if test "${enable_cpp_bindings+set}" = set; then
@@ -4743,27 +4683,29 @@ fi
 
 # Check whether --enable-debug was given.
 if test "${enable_debug+set}" = set; then
-  enableval=$enable_debug; CFLAGS="$CFLAGS -DDEBUG"
+  enableval=$enable_debug; FLAGS="$FLAGS -DDEBUG"
 fi
 
 
 # Check whether --enable-debug-annoy was given.
 if test "${enable_debug_annoy+set}" = set; then
-  enableval=$enable_debug_annoy; CFLAGS="$CFLAGS -DDEBUG -DDEBUG_ANNOY"
+  enableval=$enable_debug_annoy; FLAGS="$FLAGS -DDEBUG -DDEBUG_ANNOY"
 fi
 
 
 # If we never asked for cpp bindings OR we couldnt find a compiler disable cpp
 if test "${enable_cpp_bindings+set}" != set || test -z "${CXX}"; then
-    USE_CPP_BINDINGS=0;
+    USE_CPP_BINDINGS=0
 fi
 
 # If we have not enabled debug set common flags
 if test "${enable_debug+set}" != set && test "${enable_debug_annoy+set}" != set; then
-    CFLAGS="$CFLAGS -O3"
+    FLAGS="$FLAGS -O3"
 else
-    CFLAGS="$CFLAGS -g3"
+    FLAGS="$FLAGS -g3"
 fi
+
+
 
 
 
@@ -5463,13 +5405,14 @@ SET_MAKE!$SET_MAKE$ac_delim
 CPP!$CPP$ac_delim
 GREP!$GREP$ac_delim
 EGREP!$EGREP$ac_delim
+FLAGS!$FLAGS$ac_delim
 USE_CPP_BINDINGS!$USE_CPP_BINDINGS$ac_delim
 CLIBS!$CLIBS$ac_delim
 LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 55; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 56; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
