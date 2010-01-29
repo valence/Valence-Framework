@@ -27,6 +27,8 @@
 #ifdef DEBUG
 #define MCFLY_TAG "[libmcfly]"
 #define DEBUG_STR(_str) printf("\n" MCFLY_TAG "[debug] " _str "\n")
+#else 
+#define DEBUG_STR(_str) /* Empty */
 #endif /* DEBUG */
 
 

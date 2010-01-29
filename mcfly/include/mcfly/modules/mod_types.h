@@ -5,7 +5,7 @@
 typedef enum _mcfly_mod_type_t
 {
     MCFLY_MOD_TYPE_DUMMY,
-    MCFLY_MOD_TYPE_OBD,
+    MCFLY_MOD_TYPE_OBD
 } mcfly_mod_type_t;
 
 
