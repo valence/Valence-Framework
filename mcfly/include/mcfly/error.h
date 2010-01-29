@@ -14,9 +14,9 @@ struct _mcfly_err_code_t {int val; const char *str;};
 typedef struct _mcfly_err_code_t *mcfly_err_t;
 
 
-#define _new_err_code(_val, _name, _str)            \
+#define _new_err_code(_val, _name, _str)                           \
     static const struct _mcfly_err_code_t _##_name = {_val, _str}; \
-    static const mcfly_err_t _name = NULL;
+    static const mcfly_err_t _name = (mcfly_err_t)&_##_name;
 
 
 /* Error codes */
