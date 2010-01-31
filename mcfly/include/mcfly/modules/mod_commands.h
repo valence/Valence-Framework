@@ -16,7 +16,7 @@ typedef enum _mcfly_mod_cmd_t
     MCFLY_MOD_CMD_OBD_THROTTLE_POS,
     MCFLY_MOD_CMD_OBD_STANDARDS,
     MCFLY_MOD_CMD_OBD_AMBIENT_AIR,
-    MCFLY_MOD_CMD_OBD_VIN,
+    MCFLY_MOD_CMD_OBD_VIN
 } mcfly_mod_cmd_t;
 
 #endif /* _MCFLY_MODULES_COMMANDS_H */

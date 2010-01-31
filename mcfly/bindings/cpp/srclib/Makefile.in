@@ -1,5 +1,5 @@
 CC = @CXX@
-CFLAGS = @CFLAGS@
+FLAGS = @FLAGS@
 CLIBS = @CLIBS@
 ADDITIONAL_CFLAGS = -fPIC
 INCLUDE = ../include -I../../../include
@@ -14,6 +14,6 @@ $(LIBNAME): $(OBJS)
 	@mv -v $@ ../
 
 %.oo: %.cc
-	$(CXX) -c $< -o $@ -I$(INCLUDE) $(CFLAGS) $(ADDITIONAL_CFLAGS)
+	$(CXX) -c $< -o $@ -I$(INCLUDE) $(FLAGS) $(CXXFLAGS) $(ADDITIONAL_CFLAGS)
 
 include ../../../make.inc

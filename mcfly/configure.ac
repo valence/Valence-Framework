@@ -26,7 +26,6 @@ AC_CHECK_HEADERS([stdlib.h stddef.h fcntl.h termios.h])
 # Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_TYPE_SIZE_T
-AC_TYPE_SSIZE_T
 
 
 # Checks for library functions.
@@ -36,7 +35,9 @@ AC_CHECK_FUNCS([memset select mkfifo strchr])
 
 
 # Flags
-CFLAGS="-Wall"
+FLAGS="-Wall -pedantic"
+CFLAGS="-std=c99"
+CXXFLAGS="-std=c++98"
 
 AC_ARG_ENABLE([cpp-bindings],
               [AC_HELP_STRING([--enable-cpp-bindings], 
@@ -46,26 +47,28 @@ AC_ARG_ENABLE([cpp-bindings],
 
 AC_ARG_ENABLE([debug],
               [AC_HELP_STRING([--enable-debug], [Enable debugging build])],
-              [CFLAGS="$CFLAGS -DDEBUG"])
+              [FLAGS="$FLAGS -DDEBUG"])
 
 AC_ARG_ENABLE([debug-annoy],
               [AC_HELP_STRING([--enable-debug-annoy],
                               [Enable really verbose debugging])],
-              [CFLAGS="$CFLAGS -DDEBUG -DDEBUG_ANNOY"])
+              [FLAGS="$FLAGS -DDEBUG -DDEBUG_ANNOY"])
 
 # If we never asked for cpp bindings OR we couldnt find a compiler disable cpp
 if test "${enable_cpp_bindings+set}" != set || test -z "${CXX}"; then
-    USE_CPP_BINDINGS=0;
+    USE_CPP_BINDINGS=0
 fi
 
 # If we have not enabled debug set common flags
 if test "${enable_debug+set}" != set && test "${enable_debug_annoy+set}" != set; then
-    CFLAGS="$CFLAGS -O3"
+    FLAGS="$FLAGS -O3"
 else
-    CFLAGS="$CFLAGS -g3"
+    FLAGS="$FLAGS -g3"
 fi
 
+AC_SUBST(FLAGS)
 AC_SUBST(CFLAGS)
+AC_SUBST(CXXFLAGS)
 AC_SUBST(USE_CPP_BINDINGS)
 
 

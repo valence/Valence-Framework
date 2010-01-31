@@ -24,6 +24,15 @@
 #define MCFLY_KPH_TO_MPH(_kph) (_kph * 0.621371192)
 
 
+/* Debugging output */
+#ifdef DEBUG
+#define MCFLY_TAG "[libmcfly]"
+#define DEBUG_STR(_str) printf("\n" MCFLY_TAG "[debug] " _str "\n")
+#else 
+#define DEBUG_STR(_str) /* Empty */
+#endif /* DEBUG */
+
+
 /* mcfly_init
  *
  * Initialize the Mcfly library.
@@ -106,5 +115,15 @@ extern mcfly_err_t mcfly_command_by_name(
     const char       *mod_name,
     mcfly_mod_cmd_t   cmd,
     mcfly_mod_data_t *data);
+
+
+#ifdef DEBUG
+/* mcfly_spit
+ *
+ * Simple output testing routine.
+ * This just prints a string to standard out.
+ */
+extern void mcfly_spit(void);
+#endif /* DEBUG */
 
 #endif /* _MCFLY_LIBRARY_H */

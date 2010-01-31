@@ -16,7 +16,7 @@ extern "C"
 #include <mcfly/type.h>
 #include <mcfly/modules/mod_commands.h>
 #include <mcfly/modules/mod_types.h>
-};
+}
 #include <ostream>
 
 

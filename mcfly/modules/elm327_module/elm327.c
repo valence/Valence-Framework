@@ -40,8 +40,8 @@ int elm327_init(const char *device_path)
 
     /* Set just the baud to 38400 */
     memcpy(&elm327_termios, &elm327_termios_original, sizeof(struct termios));
-    elm327_termios.c_cflag &= ~CBAUD;
-    elm327_termios.c_cflag |= B38400;
+    cfsetispeed(&elm327_termios, B38400);
+    cfsetospeed(&elm327_termios, B38400);
 
     /* 8 data bits */
     elm327_termios.c_cflag &= ~CSIZE;

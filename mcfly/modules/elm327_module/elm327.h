@@ -18,8 +18,7 @@
 
 
 /* OBD-II mode */
-typedef enum _OBD_MODE OBD_MODE;
-enum _OBD_MODE
+typedef enum _OBD_MODE
 {
     OBD_MODE_1 = 1,
     OBD_MODE_2,
@@ -30,7 +29,7 @@ enum _OBD_MODE
     OBD_MODE_7,
     OBD_MODE_8,
     OBD_MODE_9,
-};
+} OBD_MODE;
 
 
 /* Parameter ID value */

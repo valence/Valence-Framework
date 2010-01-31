@@ -53,7 +53,7 @@ static void query_all(const mcfly_t handle)
     query(handle, MCFLY_MOD_CMD_OBD_THROTTLE_POS, &data_throttle);
     query(handle, MCFLY_MOD_CMD_OBD_STANDARDS, &data_stds);
 
-    /* Check the resulting data for speed:
+    /* Check the resulting data for speed and other values:
      * Note: We know that the speed is stored in the 'value' and not the
      * 'binary' member of the data object.
      */
@@ -99,8 +99,8 @@ int main(void)
         sleep(1);
     }
 
-    /* Shutdown Mcfly (signal handler should catch, so this probably wont
-     * execute below here...
+    /* Shutdown Mcfly (signal handler should catch, so this probably won't
+     * execute below here...)
      */
     mcfly_shutdown(mcfly);
 

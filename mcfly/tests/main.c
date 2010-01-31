@@ -31,7 +31,7 @@ static int recieved = 0;
 static mcfly_err_t recvcb(
     const mcfly_mod_t *mod,
     const void        *data,
-    ssize_t            data_size)
+    size_t             data_size)
 {
     recieved = 1;
     return MCFLY_SUCCESS;
