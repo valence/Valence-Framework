@@ -79,6 +79,8 @@ AC_SUBST(CLIBS)
 AC_CONFIG_FILES([Makefile
                  srclib/Makefile
                  tests/Makefile
+                 tools/Makefile
+                 tools/simulator/Makefile
                  modules/Makefile
                  modules/dummy_module/Makefile
                  modules/elm327_module/Makefile

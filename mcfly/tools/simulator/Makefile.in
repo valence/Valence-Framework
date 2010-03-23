@@ -1,0 +1,15 @@
+CC = @CC@
+FLAGS = @FLAGS@
+CFLAGS = @CFLAGS@
+CLIBS = @CLIBS@
+INCLUDE = ../../include
+OBJS = main.o
+APP = mcfly_sim
+EXTRA_CLEAN = $(APP)
+
+all: $(APP)
+
+$(APP): $(OBJS)
+	$(CC) -o $@ $(OBJS) -L../../srclib/ -lmcfly $(CLIBS)
+
+include ../../make.inc
