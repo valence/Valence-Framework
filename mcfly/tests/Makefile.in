@@ -1,4 +1,5 @@
 CC = @CC@
+FLAGS = @FLAGS@
 CFLAGS = @CFLAGS@
 CLIBS = @CLIBS@
 INCLUDE = ../include
