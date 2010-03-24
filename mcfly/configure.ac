@@ -81,6 +81,7 @@ AC_CONFIG_FILES([Makefile
                  tests/Makefile
                  tools/Makefile
                  tools/simulator/Makefile
+                 tools/simulator/plugins/Makefile
                  modules/Makefile
                  modules/dummy_module/Makefile
                  modules/elm327_module/Makefile

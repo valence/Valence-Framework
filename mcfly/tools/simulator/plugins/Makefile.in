@@ -1,0 +1,14 @@
+CC = @CC@
+FLAGS = @FLAGS@
+CFLAGS = @CFLAGS@
+CLIBS = @CLIBS@
+LIBOBJS = simple_plugin.o
+LIBNAME = simple_plugin
+INCLUDE = ../../include
+EXTRA_CLEAN=libsimpleplugin_*.so
+ADDITIONAL_CFLAGS = -fPIC
+
+$(LIBNAME): $(OBJS) $(LIBOBJS)
+	$(CC) -o simulator_`basename $@`.so $@.o $(OBJS) -shared $(CLIBS)
+
+include ../../../make.inc

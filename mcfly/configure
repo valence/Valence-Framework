@@ -4715,7 +4715,7 @@ fi
 CLIBS="-ldl -lpthread"
 
 
-ac_config_files="$ac_config_files Makefile srclib/Makefile tests/Makefile tools/Makefile tools/simulator/Makefile modules/Makefile modules/dummy_module/Makefile modules/elm327_module/Makefile bindings/Makefile bindings/cpp/Makefile bindings/cpp/srclib/Makefile bindings/cpp/tests/Makefile"
+ac_config_files="$ac_config_files Makefile srclib/Makefile tests/Makefile tools/Makefile tools/simulator/Makefile tools/simulator/plugins/Makefile modules/Makefile modules/dummy_module/Makefile modules/elm327_module/Makefile bindings/Makefile bindings/cpp/Makefile bindings/cpp/srclib/Makefile bindings/cpp/tests/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -5289,6 +5289,7 @@ do
     "tests/Makefile") CONFIG_FILES="$CONFIG_FILES tests/Makefile" ;;
     "tools/Makefile") CONFIG_FILES="$CONFIG_FILES tools/Makefile" ;;
     "tools/simulator/Makefile") CONFIG_FILES="$CONFIG_FILES tools/simulator/Makefile" ;;
+    "tools/simulator/plugins/Makefile") CONFIG_FILES="$CONFIG_FILES tools/simulator/plugins/Makefile" ;;
     "modules/Makefile") CONFIG_FILES="$CONFIG_FILES modules/Makefile" ;;
     "modules/dummy_module/Makefile") CONFIG_FILES="$CONFIG_FILES modules/dummy_module/Makefile" ;;
     "modules/elm327_module/Makefile") CONFIG_FILES="$CONFIG_FILES modules/elm327_module/Makefile" ;;

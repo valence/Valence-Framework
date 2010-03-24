@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dlfcn.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include "plugin.h"
 
 
 static void usage(const char *execname)
@@ -18,6 +22,32 @@ static void usage(const char *execname)
 }
 
 
+#define ERR(_str, ...)                                  \
+{                                                       \
+    fprintf(stderr, "[Error] " _str ": ", __VA_ARGS__); \
+    perror("");                                         \
+}
+
+
+static const sim_plugin_t *load_plugin(const char *plug_path)
+{
+    void               *hand;
+    const sim_plugin_t *plug;
+
+    if (!(hand = dlopen(plug_path, RTLD_LAZY)))
+      ERR("Opening plugin '%s'", plug_path);
+
+    if (!(plug = dlsym(hand, SIMULATOR_PLUGIN_NAME)))
+    {
+        dlclose(hand);
+        ERR("Could not locate the plugin symbol '%s'", SIMULATOR_PLUGIN_NAME);
+    }
+
+    dlclose(hand);
+    return plug;
+}
+
+
 #define SAFE_NEXT_ARG(_arg, _arg_len, _idx, _argc, _argv) \
     ((strncmp(_arg, _argv[_idx], _arg_len) == 0) &&       \
      ((_idx+1) < _argc) && (_argv[_idx+1][0] != '-'))
@@ -25,23 +55,31 @@ static void usage(const char *execname)
 
 int main(int argc, char **argv)
 {
-    int         i;
-    const char *dev_path, *plugin_path;
+    int                 i, dev_fd;
+    const char         *dev_path, *plugin_path;
+    const sim_plugin_t *butt;
 
     /* Args */
     dev_path = plugin_path = NULL;
     for (i=1; i<argc; ++i)
     {
         if (SAFE_NEXT_ARG("-d", 2, i, argc, argv))
-          dev_path = argv[i++];
+          dev_path = argv[++i];
         else if (SAFE_NEXT_ARG("-p", 2, i, argc, argv))
-          plugin_path = argv[i++];
+          plugin_path = argv[++i];
         else
           usage(argv[0]);
     }
 
     if (!dev_path || !plugin_path)
       usage(argv[0]);
+
+    /* Create the device */
+    if ((dev_fd = open(dev_path, O_CREAT | O_RDWR | S_IRUSR | S_IWUSR)) == -1)
+      ERR("Opening device '%s'", dev_path);
+
+    /* Load the plugin */
+    butt = load_plugin(plugin_path);
 
     return 0;
 }
