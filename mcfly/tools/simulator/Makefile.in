@@ -5,11 +5,19 @@ CLIBS = @CLIBS@
 INCLUDE = ../../include
 OBJS = main.o
 APP = mcfly_sim
+SUBDIRS = plugins
 EXTRA_CLEAN = $(APP)
 
-all: $(APP)
+all: $(APP) $(SUBDIRS)
+	@for i in $(SUBDIRS); do $(MAKE) -C $$i; done
 
 $(APP): $(OBJS)
 	$(CC) -o $@ $(OBJS) -L../../srclib/ -lmcfly $(CLIBS)
+
+clean::
+	@for i in $(SUBDIRS); do $(MAKE) clean -C $$i; done
+
+distclean::
+	@for i in $(SUBDIRS); do $(MAKE) distclean -C $$i; done
 
 include ../../make.inc

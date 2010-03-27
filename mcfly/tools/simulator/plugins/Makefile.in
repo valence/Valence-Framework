@@ -5,7 +5,7 @@ CLIBS = @CLIBS@
 LIBOBJS = simple_plugin.o
 LIBNAME = simple_plugin
 INCLUDE = ../../include
-EXTRA_CLEAN=libsimpleplugin_*.so
+EXTRA_CLEAN=*.so *.o
 ADDITIONAL_CFLAGS = -fPIC
 
 $(LIBNAME): $(OBJS) $(LIBOBJS)

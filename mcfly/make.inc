@@ -3,8 +3,8 @@ all: $(OBJS)
 %.o: %.c
 	$(CC) -c $< -o $@ -I$(INCLUDE) $(FLAGS) $(CFLAGS) $(ADDITIONAL_CFLAGS)
 
-clean:
+clean::
 	@rm -rfv $(OBJS) $(EXTRA_CLEAN)
 
-distclean:
+distclean::
 	@rm -v Makefile
