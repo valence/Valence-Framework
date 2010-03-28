@@ -24,26 +24,26 @@ static void usage(const char *execname)
 
 #define ERR(_str, ...)                                  \
 {                                                       \
-    fprintf(stderr, "[Error] " _str ": ", __VA_ARGS__); \
-    perror("");                                         \
+    fprintf(stderr, "[Error] " _str "\n", __VA_ARGS__); \
+    exit(EXIT_FAILURE);                                 \
 }
 
 
 static const sim_plugin_t *load_plugin(const char *plug_path)
 {
-    void               *hand;
-    const sim_plugin_t *plug;
+    void         *hand;
+    sim_plugin_t *plug;
 
     if (!(hand = dlopen(plug_path, RTLD_LAZY)))
       ERR("Opening plugin '%s'", plug_path);
 
-    if (!(plug = dlsym(hand, SIMULATOR_PLUGIN_NAME)))
+    if (!(plug = dlsym(hand, "__sim_plugin")))
     {
         dlclose(hand);
         ERR("Could not locate the plugin symbol '%s'", SIMULATOR_PLUGIN_NAME);
     }
 
-    dlclose(hand);
+    plug->dl_handle = hand;
     return plug;
 }
 

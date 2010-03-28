@@ -28,6 +28,9 @@ typedef struct _sim_plugin_t
     /* The name of this plugin */
     const char *name;
 
+    /* Handle from the dynamic loader (we can close this later) */
+    void *dl_handle;
+
     /* Start/shutdown the plugin */
     plugin_init init;
     plugin_exit shutdown;
