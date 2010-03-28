@@ -18,9 +18,8 @@ typedef void (*plugin_exit)(void);
 
 
 /* All plugins must be called this: */
-#define TO_STR(_sym)            #_sym
 #define SIMULATOR_PLUGIN_SYMBOL __sim_plugin
-#define SIMULATOR_PLUGIN_NAME   TO_STR(SIMULATOR_PLUGIN_SYMBOL)
+#define SIMULATOR_PLUGIN_NAME   "__sim_plugin"
 
 
 typedef struct _sim_plugin_t

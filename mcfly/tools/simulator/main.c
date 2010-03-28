@@ -37,7 +37,7 @@ static const sim_plugin_t *load_plugin(const char *plug_path)
     if (!(hand = dlopen(plug_path, RTLD_LAZY)))
       ERR("Opening plugin '%s'", plug_path);
 
-    if (!(plug = dlsym(hand, "__sim_plugin")))
+    if (!(plug = dlsym(hand, SIMULATOR_PLUGIN_NAME)))
     {
         dlclose(hand);
         ERR("Could not locate the plugin symbol '%s'", SIMULATOR_PLUGIN_NAME);
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
       usage(argv[0]);
 
     /* Create the device */
-    if ((dev_fd = open(dev_path, O_CREAT | O_RDWR | S_IRUSR | S_IWUSR)) == -1)
+    if ((dev_fd = open(dev_path, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)) == -1)
       ERR("Opening device '%s'", dev_path);
 
     /* Load the plugin */
